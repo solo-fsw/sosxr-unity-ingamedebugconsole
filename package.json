@@ -1,10 +1,20 @@
 {
   "name": "com.yasirkula.ingamedebugconsole",
-  "displayName": "In-game Debug Console",
   "version": "1.6.8",
-  "documentationUrl": "https://github.com/yasirkula/UnityIngameDebugConsole",
-  "changelogUrl": "https://github.com/yasirkula/UnityIngameDebugConsole/releases",
-  "licensesUrl": "https://github.com/yasirkula/UnityIngameDebugConsole/blob/master/LICENSE.txt",
+  "displayName": "In-game Debug Console",
   "description": "This asset helps you see debug messages (logs, warnings, errors, exceptions) runtime in a build (also assertions in editor) and execute commands using its built-in console. It also supports logging logcat messages to the console on Android platform.",
+  "unity": "2021.3",
+  "dependencies": {
+    "com.unity.modules.androidjni": "1.0.0"
+  },
+  "keywords": [
+    "Unity"
+  ],
+  "author": {
+    "name": "Yasir Kula",
+    "documentationUrl": "https://github.com/yasirkula/UnityIngameDebugConsole",
+    "changelogUrl": "https://github.com/yasirkula/UnityIngameDebugConsole/releases",
+    "licensesUrl": "https://github.com/yasirkula/UnityIngameDebugConsole/blob/master/LICENSE.txt"
+  },
   "hideInEditor": false
 }
