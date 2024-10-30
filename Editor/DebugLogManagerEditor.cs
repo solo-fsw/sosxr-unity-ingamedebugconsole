@@ -64,7 +64,7 @@ namespace IngameDebugConsole
             #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
 
             #else
-			toggleKey = serializedObject.FindProperty( "toggleKey" );
+			//toggleKey = serializedObject.FindProperty( "toggleKey" );
             #endif
             enableSearchbar = serializedObject.FindProperty("enableSearchbar");
             topSearchbarMinWidth = serializedObject.FindProperty("topSearchbarMinWidth");
