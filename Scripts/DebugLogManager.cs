@@ -751,16 +751,16 @@ namespace IngameDebugConsole
 			// when we hide the console, we don't want the commandInputField to capture the toggleKey.
 			// InputField captures input in LateUpdate so deactivating it in Update ensures that
 			// no further input is captured
-			if( toggleWithKey )
-			{
-				if( Input.GetKeyDown( toggleKey ) )
-				{
-					if( isLogWindowVisible )
-						HideLogWindow();
-					else
-						ShowLogWindow();
-				}
-			}
+			// if( toggleWithKey )
+			// {
+			// 	if( Input.GetKeyDown( toggleKey ) )
+			// 	{
+			// 		if( isLogWindowVisible )
+			// 			HideLogWindow();
+			// 		else
+			// 			ShowLogWindow();
+			// 	}
+			// }
             #endif
         }
 
