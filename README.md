@@ -1,6 +1,8 @@
-# In-game Debug Console for Unity 3D
+# In-game Debug Console for Unity3D
 
 <img height="235" src="Images/1.png" alt="screenshot" /> <img height="235" src="Images/2.png" alt="screenshot2" />
+
+**Originally developed by Yasir Kula:** https://github.com/yasirkula/UnityIngameDebugConsole
 
 **Available on Asset Store:** https://assetstore.unity.com/packages/tools/gui/in-game-debug-console-68068
 
@@ -21,16 +23,16 @@ User interface is created with **uGUI** and costs **1 SetPass call** (and 6 to 1
 Console window is optimized using a customized recycled list view that calls *Instantiate* function sparingly. 
 
 ## INSTALLATION
+1. Open the Unity project you want to install this package in.
+2. Open the Package Manager window.
+3. Click on the `+` button and select `Add package from git URL...`.
+4. Paste this URL: `https://github.com/solo-fsw/sosxr-unity-ingamedebugconsole.git`.
+5. Press `Add`.
 
-There are 5 ways to install this plugin:
 
-- import [IngameDebugConsole.unitypackage](https://github.com/yasirkula/UnityIngameDebugConsole/releases) via *Assets-Import Package*
-- clone/[download](https://github.com/yasirkula/UnityIngameDebugConsole/archive/master.zip) this repository and move the *Plugins* folder to your Unity project's *Assets* folder
-- import it from [Asset Store](https://assetstore.unity.com/packages/tools/gui/in-game-debug-console-68068)
-- *(via Package Manager)* add the following line to *Packages/manifest.json*:
-  - `"com.yasirkula.ingamedebugconsole": "https://github.com/yasirkula/UnityIngameDebugConsole.git",`
-- *(via [OpenUPM](https://openupm.com))* after installing [openupm-cli](https://github.com/openupm/openupm-cli), run the following command:
-  - `openupm add com.yasirkula.ingamedebugconsole`
+## SOSXR Additions
+The system is used mostly as Yasir Kula originally designed, with the additions of the demo scenes and prefabs found in the `SOSXR_Prefabs` folder.
+
 
 ## FAQ
 

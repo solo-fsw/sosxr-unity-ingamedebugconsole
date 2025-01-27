@@ -15,7 +15,7 @@ namespace IngameDebugConsole
         private readonly GUIContent receiveWarningLogsLabel = new("Warning");
         private readonly GUIContent receiveErrorLogsLabel = new("Error");
         private readonly GUIContent receiveExceptionLogsLabel = new("Exception");
-        private SerializedProperty singleton;
+        //private SerializedProperty singleton;
         private SerializedProperty minimumHeight;
         private SerializedProperty enableHorizontalResizing;
         private SerializedProperty resizeFromRight;
@@ -50,7 +50,7 @@ namespace IngameDebugConsole
 
         private void OnEnable()
         {
-            singleton = serializedObject.FindProperty("singleton");
+            //singleton = serializedObject.FindProperty("singleton");
             minimumHeight = serializedObject.FindProperty("minimumHeight");
             enableHorizontalResizing = serializedObject.FindProperty("enableHorizontalResizing");
             resizeFromRight = serializedObject.FindProperty("resizeFromRight");
@@ -93,7 +93,7 @@ namespace IngameDebugConsole
         {
             serializedObject.Update();
 
-            EditorGUILayout.PropertyField(singleton);
+            //EditorGUILayout.PropertyField(singleton);
 
             EditorGUILayout.Space();
 

@@ -49,12 +49,12 @@ namespace IngameDebugConsole
 
     public class DebugLogManager : MonoBehaviour
     {
-        #pragma warning disable 0649
-        [Header("Properties")]
-        [SerializeField]
-        [HideInInspector]
-        private bool singleton = false;
+        //#pragma warning disable 0649
+        //[SerializeField]
+        //[HideInInspector]
+        //private bool singleton = false;
 
+        [Header("Properties")]
         [SerializeField]
         [HideInInspector]
         [Tooltip("Minimum height of the console window")]
@@ -572,6 +572,12 @@ namespace IngameDebugConsole
             #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
             foreach (var binding in toggleBindings)
             {
+                if (binding == null || binding.action == null)
+                {
+                    Debug.LogWarning("Binding (or it's associated action) is null");
+                    continue;
+                }
+                
                 binding.action.performed += context =>
                 {
                     if (isLogWindowVisible)
@@ -619,6 +625,12 @@ namespace IngameDebugConsole
 
             foreach (var binding in toggleBindings)
             {
+                if (binding == null || binding.action == null)
+                {
+                    Debug.LogWarning("Binding (or it's associated action) is null");
+                    continue;
+                }
+                
                 binding.action.Enable();
             }
 
@@ -650,6 +662,12 @@ namespace IngameDebugConsole
 
             foreach (var binding in toggleBindings)
             {
+                if (binding == null || binding.action == null)
+                {
+                    Debug.LogWarning("Binding (or it's associated action) is null");
+                    continue;
+                }
+                
                 if (binding.action.enabled)
                 {
                     binding.action.Disable();
