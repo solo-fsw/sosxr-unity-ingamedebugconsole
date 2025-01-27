@@ -26,7 +26,7 @@ Console window is optimized using a customized recycled list view that calls *In
 1. Open the Unity project you want to install this package in.
 2. Open the Package Manager window.
 3. Click on the `+` button and select `Add package from git URL...`.
-4. Paste this URL: `https://github.com/solo-fsw/sosxr-unity-ingamedebugconsole.git`.
+4. Paste this URL: `https://github.com/solo-fsw/sosxr-unity-ingamedebugconsole.git`
 5. Press `Add`.
 
 
