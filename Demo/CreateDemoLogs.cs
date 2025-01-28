@@ -3,9 +3,14 @@ using UnityEngine;
 
 public class CreateDemoLogs : MonoBehaviour
 {
+    public string IdentifyerText;
+    
+    
     private void Start()
     {
         Debug.LogError("This is an error log");
+        
+        Debug.LogFormat("The material gets switched on the gameObject {0}", IdentifyerText);
     }
 
 
