@@ -20,8 +20,8 @@
   "author": {
     "name": "Yasir Kula",
     "documentationUrl": "https://github.com/yasirkula/UnityIngameDebugConsole",
-    "changelogUrl": "https://github.com/yasirkula/UnityIngameDebugConsole/releases",
     "licensesUrl": "https://github.com/yasirkula/UnityIngameDebugConsole/blob/master/LICENSE.txt"
   },
-  "hideInEditor": false
+  "hideInEditor": false,
+  "changelogUrl": "https://github.com/solo-fsw/sosxr-unity-ingamedebugconsole/blob/main/CHANGELOG.md"
 }
