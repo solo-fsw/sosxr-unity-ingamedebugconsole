@@ -40,8 +40,8 @@ namespace SOSXR.IngameDebugConsole
             enabled = false; // Disable this component
         }
     }
-    
-    
+
+
     [RequireComponent(typeof(Canvas))]
     public class CanvasTaggedScreenSpaceCam : MonoBehaviour
     {

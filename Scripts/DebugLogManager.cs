@@ -575,9 +575,10 @@ namespace IngameDebugConsole
                 if (binding == null || binding.action == null)
                 {
                     Debug.LogWarning("Binding (or it's associated action) is null");
+
                     continue;
                 }
-                
+
                 binding.action.performed += context =>
                 {
                     if (isLogWindowVisible)
@@ -628,9 +629,10 @@ namespace IngameDebugConsole
                 if (binding == null || binding.action == null)
                 {
                     Debug.LogWarning("Binding (or it's associated action) is null");
+
                     continue;
                 }
-                
+
                 binding.action.Enable();
             }
 
@@ -665,9 +667,10 @@ namespace IngameDebugConsole
                 if (binding == null || binding.action == null)
                 {
                     Debug.LogWarning("Binding (or it's associated action) is null");
+
                     continue;
                 }
-                
+
                 if (binding.action.enabled)
                 {
                     binding.action.Disable();
