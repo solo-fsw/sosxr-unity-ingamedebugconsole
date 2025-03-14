@@ -33,6 +33,8 @@ Console window is optimized using a customized recycled list view that calls *In
 ## SOSXR Additions
 The system is used mostly as Yasir Kula originally designed, with the additions of the demo scenes and prefabs found in the `SOSXR_Prefabs` folder.
 
+Requires New Input System to be installed in the project.
+
 
 ## FAQ
 
