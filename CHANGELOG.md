@@ -11,7 +11,6 @@ For earlier versions, please refer to the [original CHANGELOG](https://github.co
 >
 > If any issues arise when updating from previous (and higher numbered versions), please delete the old version before updating to this version.
 
-
 ## [1.7.9] - 2025-01-31
 
 ### Added
