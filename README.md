@@ -14,59 +14,79 @@
 
 ## ABOUT
 
-This asset helps you see debug messages (logs, warnings, errors, exceptions) runtime in a build (also assertions in editor) and execute commands using its built-in console. It also supports logging *logcat* messages to the console on Android platform.
+This asset helps you see debug messages (logs, warnings, errors, exceptions) runtime in a build (also assertions in
+editor) and execute commands using its built-in console. It also supports logging *logcat* messages to the console on
+Android platform.
 
-User interface is created with **uGUI** and costs **1 SetPass call** (and 6 to 10 batches) when *Sprite Packing* is enabled. It is possible to resize or hide the console window during the game. Once the console is hidden, a small popup will take its place (which can be dragged around). The popup will show the number of logs that arrived since it had appeared. Console window will reappear after clicking the popup.
+User interface is created with **uGUI** and costs **1 SetPass call** (and 6 to 10 batches) when *Sprite Packing* is
+enabled. It is possible to resize or hide the console window during the game. Once the console is hidden, a small popup
+will take its place (which can be dragged around). The popup will show the number of logs that arrived since it had
+appeared. Console window will reappear after clicking the popup.
 
 ![popup](Images/3.png)
 
-Console window is optimized using a customized recycled list view that calls *Instantiate* function sparingly. 
+Console window is optimized using a customized recycled list view that calls *Instantiate* function sparingly.
 
 ## INSTALLATION
+
 1. Open the Unity project you want to install this package in.
 2. Open the Package Manager window.
 3. Click on the `+` button and select `Add package from git URL...`.
 4. Paste this URL: `https://github.com/solo-fsw/sosxr-unity-ingamedebugconsole.git`
 5. Press `Add`.
 
-
 ## SOSXR Additions
-The system is used mostly as Yasir Kula originally designed, with the additions of the demo scenes and prefabs found in the `SOSXR_Prefabs` folder.
 
+The system is used mostly as Yasir Kula originally designed, with the additions of the demo scenes and prefabs found in
+the `SOSXR_Prefabs` folder.
+
+Requires New Input System to be installed in the project.
 
 ## FAQ
 
 - **New Input System isn't supported on Unity 2019.2.5 or earlier**
 
-Add `ENABLE_INPUT_SYSTEM` compiler directive to **Player Settings/Scripting Define Symbols** (these symbols are platform specific, so if you change the active platform later, you'll have to add the compiler directive again).
+Add `ENABLE_INPUT_SYSTEM` compiler directive to **Player Settings/Scripting Define Symbols** (these symbols are platform
+specific, so if you change the active platform later, you'll have to add the compiler directive again).
 
 - **"Unity.InputSystem" assembly can't be resolved on Unity 2018.4 or earlier**
 
-Remove `Unity.InputSystem` assembly from **IngameDebugConsole.Runtime** Assembly Definition File's *Assembly Definition References* list.
+Remove `Unity.InputSystem` assembly from **IngameDebugConsole.Runtime** Assembly Definition File's *Assembly Definition
+References* list.
 
-- **"Receive Logcat Logs In Android" isn't working, it says "java.lang.ClassNotFoundException: com.yasirkula.unity.DebugConsoleLogcatLogger" in Logcat**
+- **"Receive Logcat Logs In Android" isn't working, it says "java.lang.ClassNotFoundException:
+  com.yasirkula.unity.DebugConsoleLogcatLogger" in Logcat**
 
-If you are sure that your plugin is up-to-date, then enable **Custom Proguard File** option from *Player Settings* and add the following line to that file: `-keep class com.yasirkula.unity.* { *; }`
+If you are sure that your plugin is up-to-date, then enable **Custom Proguard File** option from *Player Settings* and
+add the following line to that file: `-keep class com.yasirkula.unity.* { *; }`
 
 ## HOW TO
 
-Simply place **IngameDebugConsole** prefab to your scene. Hovering the cursor over its properties in the Inspector will reveal explanatory tooltips.
+Simply place **IngameDebugConsole** prefab to your scene. Hovering the cursor over its properties in the Inspector will
+reveal explanatory tooltips.
 
-While testing on Unity editor, right clicking a log entry will open the corresponding line in external script editor, similar to double clicking a log in Unity Console.
+While testing on Unity editor, right clicking a log entry will open the corresponding line in external script editor,
+similar to double clicking a log in Unity Console.
 
 ## COMMAND CONSOLE
 
 ### Executing Commands
 
-You can enter commands using the input field at the bottom of the console. To see all available commands, simply type "*help*".
+You can enter commands using the input field at the bottom of the console. To see all available commands, simply type "
+*help*".
 
-A command is basically a function that can be called from the console via the command input field. This function can be **static** or an **instance function** (non static), in which case, a living instance is required to call the function. The return type of the function can be anything (including *void*). If the function returns an object, it will be printed to the console. The function can also take any number of parameters; the only restriction applies to the types of these parameters. Supported parameter types are:
+A command is basically a function that can be called from the console via the command input field. This function can be
+**static** or an **instance function** (non static), in which case, a living instance is required to call the function.
+The return type of the function can be anything (including *void*). If the function returns an object, it will be
+printed to the console. The function can also take any number of parameters; the only restriction applies to the types
+of these parameters. Supported parameter types are:
 
-**Primitive types, enums, string, Vector2, Vector3, Vector4, Color, Color32, Vector2Int, Vector3Int, Quaternion, Rect, RectInt, RectOffset, Bounds, BoundsInt, GameObject, any Component type, arrays/Lists of these supported types**
+**Primitive types, enums, string, Vector2, Vector3, Vector4, Color, Color32, Vector2Int, Vector3Int, Quaternion, Rect,
+RectInt, RectOffset, Bounds, BoundsInt, GameObject, any Component type, arrays/Lists of these supported types**
 
 Note that *GameObject* and *Component* parameters are assigned value using *GameObject.Find*.
 
-To call a registered command, simply write down the command and then provide the necessary parameters. For example: 
+To call a registered command, simply write down the command and then provide the necessary parameters. For example:
 
 `cube [0 2.5 0]`
 
@@ -74,7 +94,8 @@ To see the syntax of a command, see the help log:
 
 `- cube: Creates a cube at specified position -> TestScript.CreateCubeAt(Vector3 position)`
 
-Here, the command is *cube* and it takes a single *Vector3* parameter. This command calls the *CreateCubeAt* function in the *TestScript* script (see example code below for implementation details).
+Here, the command is *cube* and it takes a single *Vector3* parameter. This command calls the *CreateCubeAt* function in
+the *TestScript* script (see example code below for implementation details).
 
 Console uses a simple algorithm to parse the command input and has some restrictions:
 
@@ -89,11 +110,14 @@ However, there is some flexibility in the syntax, as well:
 
 ### Registering Custom Commands
 
-If all the parameters of a function are of supported types, you can register the function to the console in four different ways (all of these methods take optional string parameter(s) at the end to specify custom display names for the registered function's parameter(s)):
+If all the parameters of a function are of supported types, you can register the function to the console in four
+different ways (all of these methods take optional string parameter(s) at the end to specify custom display names for
+the registered function's parameter(s)):
 
 - **ConsoleMethod Attribute** *(not supported on UWP platform)*
 
-Simply add **IngameDebugConsole.ConsoleMethod** attribute to your functions. These functions must be *public static* and must reside in a *public* class. These constraints do not apply to the other 3 methods.
+Simply add **IngameDebugConsole.ConsoleMethod** attribute to your functions. These functions must be *public static* and
+must reside in a *public* class. These constraints do not apply to the other 3 methods.
 
 ```csharp
 using UnityEngine;
@@ -148,7 +172,11 @@ public class TestScript : MonoBehaviour
 
 - **Static Functions (weakly typed)**
 
-Use `DebugLogConsole.AddCommandStatic( string command, string description, string methodName, System.Type ownerType )`. Here, **methodName** is the name of the method in string format, and **ownerType** is the type of the owner class. It may seem strange to provide the method name in string and/or provide the type of the class; however, after hours of research, I found it the best way to register any function with any number of parameters and parameter types into the system without knowing the signature of the method.
+Use `DebugLogConsole.AddCommandStatic( string command, string description, string methodName, System.Type ownerType )`.
+Here, **methodName** is the name of the method in string format, and **ownerType** is the type of the owner class. It
+may seem strange to provide the method name in string and/or provide the type of the class; however, after hours of
+research, I found it the best way to register any function with any number of parameters and parameter types into the
+system without knowing the signature of the method.
 
 ```csharp
 using UnityEngine;
@@ -190,11 +218,13 @@ public class TestScript : MonoBehaviour
 }
 ```
 
-The only difference with *AddCommandStatic* is that, you have to provide an actual instance of the class that owns the function, instead of the type of the class.
+The only difference with *AddCommandStatic* is that, you have to provide an actual instance of the class that owns the
+function, instead of the type of the class.
 
 ### Removing Commands
 
-Use `DebugLogConsole.RemoveCommand( string command )` or one of the `DebugLogConsole.RemoveCommand( System.Action method )` variants.
+Use `DebugLogConsole.RemoveCommand( string command )` or one of the
+`DebugLogConsole.RemoveCommand( System.Action method )` variants.
 
 ### Extending Supported Parameter Types
 
