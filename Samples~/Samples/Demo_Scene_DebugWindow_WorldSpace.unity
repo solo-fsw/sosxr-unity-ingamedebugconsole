@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &142140615 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7535676654593022862, guid: 6058d8b0e778e4f7e9749d9ea314a4b5, type: 3}
+  m_PrefabInstance: {fileID: 405615216}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &405615216
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -670,6 +675,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05a7c62fccbafd342991629222351294, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _scenePrefabInstances:
+  - _gameObject: {fileID: 142140615}
+    _prefab: Assets/_SOSXR/sosxr-unity-ingamedebugconsole/InEditorSamples/Samples/SOSXR_Prefabs/IngameDebugConsole_WS.prefab
 --- !u!4 &1520510382
 Transform:
   m_ObjectHideFlags: 11
@@ -847,9 +855,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2051694779}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a82ba143e150413e9238cb86cab16e6, type: 3}
+  m_Script: {fileID: 11500000, guid: 1587c84ccdf0b4967b121c15938dfdfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IdentifyerText: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

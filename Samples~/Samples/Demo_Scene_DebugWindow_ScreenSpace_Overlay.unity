@@ -400,6 +400,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
+--- !u!1 &1088368063 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 132536, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
+  m_PrefabInstance: {fileID: 1088368062}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1320261066
 GameObject:
   m_ObjectHideFlags: 0
@@ -566,6 +571,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05a7c62fccbafd342991629222351294, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _scenePrefabInstances:
+  - _gameObject: {fileID: 1088368063}
+    _prefab: Assets/_SOSXR/sosxr-unity-ingamedebugconsole/InEditorSamples/Samples/SOSXR_Prefabs/IngameDebugConsole_SS_Overlay.prefab
 --- !u!4 &1520510382
 Transform:
   m_ObjectHideFlags: 11
@@ -590,7 +598,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1841545040}
-  - component: {fileID: 1841545039}
+  - component: {fileID: 1841545041}
   m_Layer: 0
   m_Name: CreateDemoLogs
   m_TagString: Untagged
@@ -598,19 +606,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1841545039
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1841545038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a82ba143e150413e9238cb86cab16e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IdentifyerText: Testes
 --- !u!4 &1841545040
 Transform:
   m_ObjectHideFlags: 0
@@ -626,6 +621,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1841545041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1841545038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1587c84ccdf0b4967b121c15938dfdfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IdentifyerText: 
 --- !u!1 &2017702797
 GameObject:
   m_ObjectHideFlags: 0
