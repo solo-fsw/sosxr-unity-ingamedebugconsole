@@ -1283,18 +1283,12 @@ namespace IngameDebugConsole
                         newErrorEntryCount--;
                     }
 
-                    if (queuedLogEntriesTimestamps != null)
-                    {
-                        queuedLogEntriesTimestamps.RemoveFirst();
-                    }
+                    queuedLogEntriesTimestamps?.RemoveFirst();
                 }
 
                 queuedLogEntries.Add(queuedLogEntry);
 
-                if (queuedLogEntriesTimestamps != null)
-                {
-                    queuedLogEntriesTimestamps.Add(queuedLogEntryTimestamp);
-                }
+                queuedLogEntriesTimestamps?.Add(queuedLogEntryTimestamp);
 
                 if (logType == LogType.Log)
                 {
@@ -1362,10 +1356,7 @@ namespace IngameDebugConsole
                 collapsedLogEntries.Add(logEntry);
                 collapsedLogEntriesMap[logEntry] = logEntry;
 
-                if (collapsedLogEntriesTimestamps != null)
-                {
-                    collapsedLogEntriesTimestamps.Add(timestamp);
-                }
+                collapsedLogEntriesTimestamps?.Add(timestamp);
             }
             else
             {
@@ -1384,10 +1375,7 @@ namespace IngameDebugConsole
 
             uncollapsedLogEntries.Add(logEntry);
 
-            if (uncollapsedLogEntriesTimestamps != null)
-            {
-                uncollapsedLogEntriesTimestamps.Add(timestamp);
-            }
+            uncollapsedLogEntriesTimestamps?.Add(timestamp);
 
             // If this.Info entry matches the current filters,
             // add it to the list of debug entries to show
@@ -1429,10 +1417,7 @@ namespace IngameDebugConsole
                 logEntriesToShow.Add(logEntry);
                 logEntryIndexInEntriesToShow = logEntriesToShow.Count - 1;
 
-                if (timestampsOfLogEntriesToShow != null)
-                {
-                    timestampsOfLogEntriesToShow.Add(timestamp);
-                }
+                timestampsOfLogEntriesToShow?.Add(timestamp);
 
                 shouldUpdateRecycledListView = true;
             }
@@ -1459,19 +1444,13 @@ namespace IngameDebugConsole
 
             uncollapsedLogEntries.TrimStart(numberOfLogsToRemove, removeUncollapsedLogEntryAction);
 
-            if (uncollapsedLogEntriesTimestamps != null)
-            {
-                uncollapsedLogEntriesTimestamps.TrimStart(numberOfLogsToRemove);
-            }
+            uncollapsedLogEntriesTimestamps?.TrimStart(numberOfLogsToRemove);
 
             if (removedLogEntriesToShowCount > 0)
             {
                 logEntriesToShow.TrimStart(removedLogEntriesToShowCount);
 
-                if (timestampsOfLogEntriesToShow != null)
-                {
-                    timestampsOfLogEntriesToShow.TrimStart(removedLogEntriesToShowCount);
-                }
+                timestampsOfLogEntriesToShow?.TrimStart(removedLogEntriesToShowCount);
             }
 
             if (anyCollapsedLogRemoved)
@@ -1736,10 +1715,7 @@ namespace IngameDebugConsole
         // Search term has changed
         private void SearchTermChanged(string searchTerm)
         {
-            if (searchTerm != null)
-            {
-                searchTerm = searchTerm.Trim();
-            }
+            searchTerm = searchTerm?.Trim();
 
             this.searchTerm = searchTerm;
             var isInSearchMode = !string.IsNullOrEmpty(searchTerm);
@@ -1987,10 +1963,7 @@ namespace IngameDebugConsole
         {
             logEntriesToShow.Clear();
 
-            if (timestampsOfLogEntriesToShow != null)
-            {
-                timestampsOfLogEntriesToShow.Clear();
-            }
+            timestampsOfLogEntriesToShow?.Clear();
 
             if (logFilter != DebugLogFilter.None)
             {
@@ -2003,10 +1976,7 @@ namespace IngameDebugConsole
                     {
                         logEntriesToShow.AddRange(targetLogEntries);
 
-                        if (timestampsOfLogEntriesToShow != null)
-                        {
-                            timestampsOfLogEntriesToShow.AddRange(targetLogEntriesTimestamps);
-                        }
+                        timestampsOfLogEntriesToShow?.AddRange(targetLogEntriesTimestamps);
                     }
                     else
                     {
@@ -2016,10 +1986,7 @@ namespace IngameDebugConsole
                             {
                                 logEntriesToShow.Add(targetLogEntries[i]);
 
-                                if (timestampsOfLogEntriesToShow != null)
-                                {
-                                    timestampsOfLogEntriesToShow.Add(targetLogEntriesTimestamps[i]);
-                                }
+                                timestampsOfLogEntriesToShow?.Add(targetLogEntriesTimestamps[i]);
                             }
                         }
                     }
@@ -2065,10 +2032,7 @@ namespace IngameDebugConsole
                         {
                             logEntriesToShow.Add(logEntry);
 
-                            if (timestampsOfLogEntriesToShow != null)
-                            {
-                                timestampsOfLogEntriesToShow.Add(targetLogEntriesTimestamps[i]);
-                            }
+                            timestampsOfLogEntriesToShow?.Add(targetLogEntriesTimestamps[i]);
                         }
                     }
                 }

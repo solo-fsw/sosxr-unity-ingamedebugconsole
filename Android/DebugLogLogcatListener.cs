@@ -23,10 +23,7 @@ namespace IngameDebugConsole
         {
             Stop();
 
-            if (nativeObject != null)
-            {
-                nativeObject.Dispose();
-            }
+            nativeObject?.Dispose();
         }
 
 
@@ -43,10 +40,7 @@ namespace IngameDebugConsole
 
         public void Stop()
         {
-            if (nativeObject != null)
-            {
-                nativeObject.Call("Stop");
-            }
+            nativeObject?.Call("Stop");
         }
 
 

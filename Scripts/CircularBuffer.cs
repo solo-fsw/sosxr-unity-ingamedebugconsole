@@ -286,10 +286,7 @@ namespace IngameDebugConsole
 
             TrimEnd(removedElements);
 
-            if (synchronizedBuffer != null)
-            {
-                synchronizedBuffer.TrimEnd(removedElements);
-            }
+            synchronizedBuffer?.TrimEnd(removedElements);
 
             return removedElements;
         }
