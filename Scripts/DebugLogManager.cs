@@ -54,274 +54,181 @@ namespace IngameDebugConsole
         //[HideInInspector]
         //private bool singleton = false;
 
-        [Header("Properties")]
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("Minimum height of the console window")]
+        [Header("Properties")] [SerializeField] [HideInInspector] [Tooltip("Minimum height of the console window")]
         private float minimumHeight = 200f;
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("If enabled, console window can be resized horizontally, as well")]
-        private bool enableHorizontalResizing = false;
+        [SerializeField] [HideInInspector] [Tooltip("If enabled, console window can be resized horizontally, as well")]
+        private bool enableHorizontalResizing;
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("If enabled, console window's resize button will be located at bottom-right corner. Otherwise, it will be located at bottom-left corner")]
+        [SerializeField] [HideInInspector] [Tooltip("If enabled, console window's resize button will be located at bottom-right corner. Otherwise, it will be located at bottom-left corner")]
         private bool resizeFromRight = true;
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("Minimum width of the console window")]
+        [SerializeField] [HideInInspector] [Tooltip("Minimum width of the console window")]
         private float minimumWidth = 240f;
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("Opacity of the console window")]
-        [Range(0f, 1f)]
+        [SerializeField] [HideInInspector] [Tooltip("Opacity of the console window")] [Range(0f, 1f)]
         private float logWindowOpacity = 1f;
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("Opacity of the popup")]
-        [Range(0f, 1f)]
+        [SerializeField] [HideInInspector] [Tooltip("Opacity of the popup")] [Range(0f, 1f)]
         internal float popupOpacity = 1f;
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("Determines when the popup will show up (after the console window is closed)")]
+        [SerializeField] [HideInInspector] [Tooltip("Determines when the popup will show up (after the console window is closed)")]
         private PopupVisibility popupVisibility = PopupVisibility.Always;
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("Determines which log types will show the popup on screen")]
+        [SerializeField] [HideInInspector] [Tooltip("Determines which log types will show the popup on screen")]
         private DebugLogFilter popupVisibilityLogFilter = DebugLogFilter.All;
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("If enabled, console window will initially be invisible")]
-        private bool startMinimized = false;
+        [SerializeField] [HideInInspector] [Tooltip("If enabled, console window will initially be invisible")]
+        private bool startMinimized;
 
 
-        #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
         [SerializeField]
         //[HideInInspector]
         //public InputAction toggleBinding = new InputAction( "Toggle Binding", type: InputActionType.Button, binding: "<Keyboard>/backquote", expectedControlType: "Button" );
         public List<InputActionReference> toggleBindings;
-        #else
+#else
 		[SerializeField]
 		[HideInInspector]
 		private KeyCode toggleKey = KeyCode.BackQuote;
-        #endif
+#endif
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("If enabled, the console window will have a searchbar")]
+        [SerializeField] [HideInInspector] [Tooltip("If enabled, the console window will have a searchbar")]
         private bool enableSearchbar = true;
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("Width of the canvas determines whether the searchbar will be located inside the menu bar or underneath the menu bar. This way, the menu bar doesn't get too crowded on narrow screens. This value determines the minimum width of the canvas for the searchbar to appear inside the menu bar")]
+        [SerializeField] [HideInInspector] [Tooltip("Width of the canvas determines whether the searchbar will be located inside the menu bar or underneath the menu bar. This way, the menu bar doesn't get too crowded on narrow screens. This value determines the minimum width of the canvas for the searchbar to appear inside the menu bar")]
         private float topSearchbarMinWidth = 360f;
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("If enabled, the console window will continue receiving logs in the background even if its GameObject is inactive. But the console window's GameObject needs to be activated at least once because its Awake function must be triggered for this to work")]
-        private bool receiveLogsWhileInactive = false;
+        [SerializeField] [HideInInspector] [Tooltip("If enabled, the console window will continue receiving logs in the background even if its GameObject is inactive. But the console window's GameObject needs to be activated at least once because its Awake function must be triggered for this to work")]
+        private bool receiveLogsWhileInactive;
 
-        [SerializeField]
-        [HideInInspector]
-        private bool receiveInfoLogs = true, receiveWarningLogs = true, receiveErrorLogs = true, receiveExceptionLogs = true;
+        [SerializeField] [HideInInspector] private bool receiveInfoLogs = true, receiveWarningLogs = true, receiveErrorLogs = true, receiveExceptionLogs = true;
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("If enabled, the arrival times of logs will be recorded and displayed when a log is expanded")]
-        private bool captureLogTimestamps = false;
+        [SerializeField] [HideInInspector] [Tooltip("If enabled, the arrival times of logs will be recorded and displayed when a log is expanded")]
+        private bool captureLogTimestamps;
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("If enabled, timestamps will be displayed for logs even if they aren't expanded")]
-        internal bool alwaysDisplayTimestamps = false;
+        [SerializeField] [HideInInspector] [Tooltip("If enabled, timestamps will be displayed for logs even if they aren't expanded")]
+        internal bool alwaysDisplayTimestamps;
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("If the number of logs reach this limit, the oldest log(s) will be deleted to limit the RAM usage. It's recommended to set this value as low as possible")]
+        [SerializeField] [HideInInspector] [Tooltip("If the number of logs reach this limit, the oldest log(s) will be deleted to limit the RAM usage. It's recommended to set this value as low as possible")]
         private int maxLogCount = int.MaxValue;
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("How many log(s) to delete when the threshold is reached (all logs are iterated during this operation so it should neither be too low nor too high)")]
+        [SerializeField] [HideInInspector] [Tooltip("How many log(s) to delete when the threshold is reached (all logs are iterated during this operation so it should neither be too low nor too high)")]
         private int logsToRemoveAfterMaxLogCount = 16;
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("While the console window is hidden, incoming logs will be queued but not immediately processed until the console window is opened (to avoid wasting CPU resources). When the log queue exceeds this limit, the first logs in the queue will be processed to enforce this limit. Processed logs won't increase RAM usage if they've been seen before (i.e. collapsible logs) but this is not the case for queued logs, so if a log is spammed every frame, it will fill the whole queue in an instant. Which is why there is a queue limit")]
+        [SerializeField] [HideInInspector] [Tooltip("While the console window is hidden, incoming logs will be queued but not immediately processed until the console window is opened (to avoid wasting CPU resources). When the log queue exceeds this limit, the first logs in the queue will be processed to enforce this limit. Processed logs won't increase RAM usage if they've been seen before (i.e. collapsible logs) but this is not the case for queued logs, so if a log is spammed every frame, it will fill the whole queue in an instant. Which is why there is a queue limit")]
         private int queuedLogLimit = 256;
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("If enabled, the command input field at the bottom of the console window will automatically be cleared after entering a command")]
+        [SerializeField] [HideInInspector] [Tooltip("If enabled, the command input field at the bottom of the console window will automatically be cleared after entering a command")]
         private bool clearCommandAfterExecution = true;
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("Console keeps track of the previously entered commands. This value determines the capacity of the command history (you can scroll through the history via up and down arrow keys while the command input field is focused)")]
+        [SerializeField] [HideInInspector] [Tooltip("Console keeps track of the previously entered commands. This value determines the capacity of the command history (you can scroll through the history via up and down arrow keys while the command input field is focused)")]
         private int commandHistorySize = 15;
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("If enabled, while typing a command, all of the matching commands' signatures will be displayed in a popup")]
+        [SerializeField] [HideInInspector] [Tooltip("If enabled, while typing a command, all of the matching commands' signatures will be displayed in a popup")]
         private bool showCommandSuggestions = true;
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("If enabled, on Android platform, logcat entries of the application will also be logged to the console with the prefix \"LOGCAT: \". This may come in handy especially if you want to access the native logs of your Android plugins (like Admob)")]
-        private bool receiveLogcatLogsInAndroid = false;
+        [SerializeField] [HideInInspector] [Tooltip("If enabled, on Android platform, logcat entries of the application will also be logged to the console with the prefix \"LOGCAT: \". This may come in handy especially if you want to access the native logs of your Android plugins (like Admob)")]
+        private bool receiveLogcatLogsInAndroid;
 
-        #pragma warning disable 0414
-        #if UNITY_2018_3_OR_NEWER // On older Unity versions, disabling CS0169 is problematic: "Cannot restore warning 'CS0169' because it was disabled globally"
-        #pragma warning disable 0169
-        #endif
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("Native logs will be filtered using these arguments. If left blank, all native logs of the application will be logged to the console. But if you want to e.g. see Admob's logs only, you can enter \"-s Ads\" (without quotes) here")]
+#pragma warning disable 0414
+#if UNITY_2018_3_OR_NEWER // On older Unity versions, disabling CS0169 is problematic: "Cannot restore warning 'CS0169' because it was disabled globally"
+#pragma warning disable 0169
+#endif
+        [SerializeField] [HideInInspector] [Tooltip("Native logs will be filtered using these arguments. If left blank, all native logs of the application will be logged to the console. But if you want to e.g. see Admob's logs only, you can enter \"-s Ads\" (without quotes) here")]
         private string logcatArguments;
-        #if UNITY_2018_3_OR_NEWER
-        #pragma warning restore 0169
-        #endif
-        #pragma warning restore 0414
+#if UNITY_2018_3_OR_NEWER
+#pragma warning restore 0169
+#endif
+#pragma warning restore 0414
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("If enabled, on Android and iOS devices with notch screens, the console window will be repositioned so that the cutout(s) don't obscure it")]
+        [SerializeField] [HideInInspector] [Tooltip("If enabled, on Android and iOS devices with notch screens, the console window will be repositioned so that the cutout(s) don't obscure it")]
         private bool avoidScreenCutout = true;
 
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("If enabled, on Android and iOS devices with notch screens, the console window's popup won't be obscured by the screen cutouts")]
-        internal bool popupAvoidsScreenCutout = false;
+        [SerializeField] [HideInInspector] [Tooltip("If enabled, on Android and iOS devices with notch screens, the console window's popup won't be obscured by the screen cutouts")]
+        internal bool popupAvoidsScreenCutout;
 
-        [SerializeField]
-        [Tooltip("If a log is longer than this limit, it will be truncated. This helps avoid reaching Unity's 65000 vertex limit for UI canvases")]
+        [SerializeField] [Tooltip("If a log is longer than this limit, it will be truncated. This helps avoid reaching Unity's 65000 vertex limit for UI canvases")]
         private int maxLogLength = 10000;
 
-        #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
-        [SerializeField]
-        [HideInInspector]
-        [Tooltip("If enabled, on standalone platforms, command input field will automatically be focused (start receiving keyboard input) after opening the console window")]
+#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
+        [SerializeField] [HideInInspector] [Tooltip("If enabled, on standalone platforms, command input field will automatically be focused (start receiving keyboard input) after opening the console window")]
         private bool autoFocusOnCommandInputField = true;
-        #endif
+#endif
 
         [SerializeField] private bool m_startCollapsed = true;
 
-        [Header("Visuals")]
-        [SerializeField]
-        private DebugLogItem logItemPrefab;
+        [Header("Visuals")] [SerializeField] private DebugLogItem logItemPrefab;
 
-        [SerializeField]
-        private Text commandSuggestionPrefab;
+        [SerializeField] private Text commandSuggestionPrefab;
 
         // Visuals for different log types
-        [SerializeField]
-        private Sprite infoLog;
-        [SerializeField]
-        private Sprite warningLog;
-        [SerializeField]
-        private Sprite errorLog;
+        [SerializeField] private Sprite infoLog;
+        [SerializeField] private Sprite warningLog;
+        [SerializeField] private Sprite errorLog;
 
         private Sprite[] logSpriteRepresentations;
 
         // Visuals for resize button
-        [SerializeField]
-        private Sprite resizeIconAllDirections;
-        [SerializeField]
-        private Sprite resizeIconVerticalOnly;
+        [SerializeField] private Sprite resizeIconAllDirections;
+        [SerializeField] private Sprite resizeIconVerticalOnly;
 
-        [SerializeField]
-        private Color collapseButtonNormalColor;
-        [SerializeField]
-        private Color collapseButtonSelectedColor;
+        [SerializeField] private Color collapseButtonNormalColor;
+        [SerializeField] private Color collapseButtonSelectedColor;
 
-        [SerializeField]
-        private Color filterButtonsNormalColor;
-        [SerializeField]
-        private Color filterButtonsSelectedColor;
+        [SerializeField] private Color filterButtonsNormalColor;
+        [SerializeField] private Color filterButtonsSelectedColor;
 
-        [SerializeField]
-        private string commandSuggestionHighlightStart = "<color=orange>";
-        [SerializeField]
-        private string commandSuggestionHighlightEnd = "</color>";
+        [SerializeField] private string commandSuggestionHighlightStart = "<color=orange>";
+        [SerializeField] private string commandSuggestionHighlightEnd = "</color>";
 
-        [Header("Internal References")]
-        [SerializeField]
+        [Header("Internal References")] [SerializeField]
         private RectTransform logWindowTR;
 
         internal RectTransform canvasTR;
 
-        [SerializeField]
-        private RectTransform logItemsContainer;
+        [SerializeField] private RectTransform logItemsContainer;
 
-        [SerializeField]
-        private RectTransform commandSuggestionsContainer;
+        [SerializeField] private RectTransform commandSuggestionsContainer;
 
-        [SerializeField]
-        private InputField commandInputField;
+        [SerializeField] private InputField commandInputField;
 
-        [SerializeField]
-        private Button hideButton;
+        [SerializeField] private Button hideButton;
 
-        [SerializeField]
-        private Button clearButton;
+        [SerializeField] private Button clearButton;
 
-        [SerializeField]
-        private Image collapseButton;
+        [SerializeField] private Image collapseButton;
 
-        [SerializeField]
-        private Image filterInfoButton;
-        [SerializeField]
-        private Image filterWarningButton;
-        [SerializeField]
-        private Image filterErrorButton;
+        [SerializeField] private Image filterInfoButton;
+        [SerializeField] private Image filterWarningButton;
+        [SerializeField] private Image filterErrorButton;
 
-        [SerializeField]
-        private Text infoEntryCountText;
-        [SerializeField]
-        private Text warningEntryCountText;
-        [SerializeField]
-        private Text errorEntryCountText;
+        [SerializeField] private Text infoEntryCountText;
+        [SerializeField] private Text warningEntryCountText;
+        [SerializeField] private Text errorEntryCountText;
 
-        [SerializeField]
-        private RectTransform searchbar;
-        [SerializeField]
-        private RectTransform searchbarSlotTop;
-        [SerializeField]
-        private RectTransform searchbarSlotBottom;
+        [SerializeField] private RectTransform searchbar;
+        [SerializeField] private RectTransform searchbarSlotTop;
+        [SerializeField] private RectTransform searchbarSlotBottom;
 
-        [SerializeField]
-        private Image resizeButton;
+        [SerializeField] private Image resizeButton;
 
-        [SerializeField]
-        private GameObject snapToBottomButton;
+        [SerializeField] private GameObject snapToBottomButton;
 
         // Canvas group to modify visibility of the log window
-        [SerializeField]
-        private CanvasGroup logWindowCanvasGroup;
+        [SerializeField] private CanvasGroup logWindowCanvasGroup;
 
-        [SerializeField]
-        private DebugLogPopup popupManager;
+        [SerializeField] private DebugLogPopup popupManager;
 
-        [SerializeField]
-        private ScrollRect logItemsScrollRect;
+        [SerializeField] private ScrollRect logItemsScrollRect;
         private RectTransform logItemsScrollRectTR;
         private Vector2 logItemsScrollRectOriginalSize;
 
         // Recycled list view to handle the log items efficiently
-        [SerializeField]
-        private DebugLogRecycledListView recycledListView;
-        #pragma warning restore 0649
+        [SerializeField] private DebugLogRecycledListView recycledListView;
+#pragma warning restore 0649
 
-        private bool isLogWindowVisible = true;
-        public bool IsLogWindowVisible => isLogWindowVisible;
+        public bool IsLogWindowVisible { get; private set; } = true;
 
         public bool PopupEnabled
         {
@@ -333,15 +240,15 @@ namespace IngameDebugConsole
         private float logWindowPreviousWidth;
 
         // Number of entries filtered by their types
-        private int infoEntryCount = 0, warningEntryCount = 0, errorEntryCount = 0;
+        private int infoEntryCount, warningEntryCount, errorEntryCount;
         private bool entryCountTextsDirty;
 
         // Number of new entries received this frame
-        private int newInfoEntryCount = 0, newWarningEntryCount = 0, newErrorEntryCount = 0;
+        private int newInfoEntryCount, newWarningEntryCount, newErrorEntryCount;
 
         // Filters to apply to the list of debug entries to show
 
-        private bool isCollapseOn = false;
+        private bool isCollapseOn;
         private DebugLogFilter logFilter = DebugLogFilter.All;
 
         // Search filter
@@ -350,8 +257,7 @@ namespace IngameDebugConsole
 
         // If the last log item is completely visible (scrollbar is at the bottom),
         // scrollbar will remain at the bottom when new debug entries are received
-        [NonSerialized]
-        public bool SnapToBottom = true;
+        [NonSerialized] public bool SnapToBottom = true;
 
         // List of unique debug entries (duplicates of entries are not kept)
         private DynamicCircularBuffer<DebugLogEntry> collapsedLogEntries;
@@ -383,7 +289,7 @@ namespace IngameDebugConsole
 
         // Command suggestions that match the currently entered command
         private List<Text> commandSuggestionInstances;
-        private int visibleCommandSuggestionInstances = 0;
+        private int visibleCommandSuggestionInstances;
         private List<ConsoleMethodInfo> matchingCommandSuggestions;
         private List<int> commandCaretIndexIncrements;
         private string commandInputFieldPrevCommand;
@@ -403,6 +309,7 @@ namespace IngameDebugConsole
         /// Variables used by
         /// <see cref="RemoveOldestLogs" />
         private bool anyCollapsedLogRemoved;
+
         private int removedLogEntriesToShowCount;
 
         // History of the previously entered commands
@@ -417,12 +324,12 @@ namespace IngameDebugConsole
         private TimeSpan localTimeUtcOffset;
 
         // Last recorded values of Time.realtimeSinceStartup and Time.frameCount on the main thread (because these Time properties can't be accessed from other threads)
-        #if !IDG_OMIT_ELAPSED_TIME
+#if !IDG_OMIT_ELAPSED_TIME
         private float lastElapsedSeconds;
-        #endif
-        #if !IDG_OMIT_FRAMECOUNT
+#endif
+#if !IDG_OMIT_FRAMECOUNT
         private int lastFrameCount;
-        #endif
+#endif
 
         private DebugLogEntryTimestamp dummyLogEntryTimestamp;
 
@@ -438,13 +345,13 @@ namespace IngameDebugConsole
         // Callbacks for log window show/hide events
         public Action OnLogWindowShown, OnLogWindowHidden;
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         private bool isQuittingApplication;
-        #endif
+#endif
 
-        #if !UNITY_EDITOR && UNITY_ANDROID
+#if !UNITY_EDITOR && UNITY_ANDROID
 		private DebugLogLogcatListener logcatListener;
-        #endif
+#endif
 
 
         private void Awake()
@@ -460,17 +367,17 @@ namespace IngameDebugConsole
             logEntriesLock = new object();
             sharedStringBuilder = new StringBuilder(1024);
 
-            canvasTR = (RectTransform) transform;
-            logItemsScrollRectTR = (RectTransform) logItemsScrollRect.transform;
+            canvasTR = (RectTransform)transform;
+            logItemsScrollRectTR = (RectTransform)logItemsScrollRect.transform;
             logItemsScrollRectOriginalSize = logItemsScrollRectTR.sizeDelta;
 
             // Associate sprites with log types
             logSpriteRepresentations = new Sprite[5];
-            logSpriteRepresentations[(int) LogType.Log] = infoLog;
-            logSpriteRepresentations[(int) LogType.Warning] = warningLog;
-            logSpriteRepresentations[(int) LogType.Error] = errorLog;
-            logSpriteRepresentations[(int) LogType.Exception] = errorLog;
-            logSpriteRepresentations[(int) LogType.Assert] = errorLog;
+            logSpriteRepresentations[(int)LogType.Log] = infoLog;
+            logSpriteRepresentations[(int)LogType.Warning] = warningLog;
+            logSpriteRepresentations[(int)LogType.Error] = errorLog;
+            logSpriteRepresentations[(int)LogType.Exception] = errorLog;
+            logSpriteRepresentations[(int)LogType.Assert] = errorLog;
 
             // Initially, all log types are visible
             filterInfoButton.color = filterButtonsSelectedColor;
@@ -506,12 +413,12 @@ namespace IngameDebugConsole
 
             if (!resizeFromRight)
             {
-                var resizeButtonTR = (RectTransform) resizeButton.GetComponentInParent<DebugLogResizeListener>().transform;
+                var resizeButtonTR = (RectTransform)resizeButton.GetComponentInParent<DebugLogResizeListener>().transform;
                 resizeButtonTR.anchorMin = new Vector2(0f, resizeButtonTR.anchorMin.y);
                 resizeButtonTR.anchorMax = new Vector2(0f, resizeButtonTR.anchorMax.y);
                 resizeButtonTR.pivot = new Vector2(0f, resizeButtonTR.pivot.y);
 
-                ((RectTransform) commandInputField.transform).anchoredPosition += new Vector2(resizeButtonTR.sizeDelta.x, 0f);
+                ((RectTransform)commandInputField.transform).anchoredPosition += new Vector2(resizeButtonTR.sizeDelta.x, 0f);
             }
 
             if (enableSearchbar)
@@ -562,14 +469,14 @@ namespace IngameDebugConsole
                 Application.logMessageReceivedThreaded += ReceivedLog;
             }
 
-            #if UNITY_EDITOR && UNITY_2018_1_OR_NEWER
+#if UNITY_EDITOR && UNITY_2018_1_OR_NEWER
             // OnApplicationQuit isn't reliable on some Unity versions when Application.wantsToQuit is used; Application.quitting is the only reliable solution on those versions
             // https://issuetracker.unity3d.com/issues/onapplicationquit-method-is-called-before-application-dot-wantstoquit-event-is-raised
             Application.quitting -= OnApplicationQuitting;
             Application.quitting += OnApplicationQuitting;
-            #endif
+#endif
 
-            #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
             foreach (var binding in toggleBindings)
             {
                 if (binding == null || binding.action == null)
@@ -581,7 +488,7 @@ namespace IngameDebugConsole
 
                 binding.action.performed += context =>
                 {
-                    if (isLogWindowVisible)
+                    if (IsLogWindowVisible)
                     {
                         HideLogWindow();
                     }
@@ -595,7 +502,7 @@ namespace IngameDebugConsole
 
             // On new Input System, scroll sensitivity is much higher than legacy Input system
             logItemsScrollRect.scrollSensitivity *= 0.25f;
-            #endif
+#endif
         }
 
 
@@ -609,20 +516,20 @@ namespace IngameDebugConsole
 
             if (receiveLogcatLogsInAndroid)
             {
-                #if !UNITY_EDITOR && UNITY_ANDROID
+#if !UNITY_EDITOR && UNITY_ANDROID
 				if( logcatListener == null )
 					logcatListener = new DebugLogLogcatListener();
 
 				logcatListener.Start( logcatArguments );
-                #endif
+#endif
             }
 
-            #if IDG_ENABLE_HELPER_COMMANDS || IDG_ENABLE_LOGS_SAVE_COMMAND
+#if IDG_ENABLE_HELPER_COMMANDS || IDG_ENABLE_LOGS_SAVE_COMMAND
 			DebugLogConsole.AddCommand( "logs.save", "Saves logs to persistentDataPath", SaveLogsToFile );
 			DebugLogConsole.AddCommand<string>( "logs.save", "Saves logs to the specified file", SaveLogsToFile );
-            #endif
+#endif
 
-            #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
 
             foreach (var binding in toggleBindings)
             {
@@ -636,7 +543,7 @@ namespace IngameDebugConsole
                 binding.action.Enable();
             }
 
-            #endif
+#endif
 
             //Debug.LogAssertion( "assert" );
             //Debug.LogError( "error" );
@@ -653,14 +560,14 @@ namespace IngameDebugConsole
                 Application.logMessageReceivedThreaded -= ReceivedLog;
             }
 
-            #if !UNITY_EDITOR && UNITY_ANDROID
+#if !UNITY_EDITOR && UNITY_ANDROID
 			if( logcatListener != null )
 				logcatListener.Stop();
-            #endif
+#endif
 
             DebugLogConsole.RemoveCommand("logs.save");
 
-            #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
 
             foreach (var binding in toggleBindings)
             {
@@ -676,7 +583,7 @@ namespace IngameDebugConsole
                     binding.action.Disable();
                 }
             }
-            #endif
+#endif
         }
 
 
@@ -707,13 +614,13 @@ namespace IngameDebugConsole
                 Application.logMessageReceivedThreaded -= ReceivedLog;
             }
 
-            #if UNITY_EDITOR && UNITY_2018_1_OR_NEWER
+#if UNITY_EDITOR && UNITY_2018_1_OR_NEWER
             Application.quitting -= OnApplicationQuitting;
-            #endif
+#endif
         }
 
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         private void OnValidate()
         {
             maxLogCount = Mathf.Max(2, maxLogCount);
@@ -731,15 +638,15 @@ namespace IngameDebugConsole
         }
 
 
-        #if UNITY_2018_1_OR_NEWER
+#if UNITY_2018_1_OR_NEWER
         private void OnApplicationQuitting()
-            #else
+#else
 		private void OnApplicationQuit()
-            #endif
+#endif
         {
             isQuittingApplication = true;
         }
-        #endif
+#endif
 
 
         // Window is resized, update the list
@@ -751,23 +658,23 @@ namespace IngameDebugConsole
 
         private void Update()
         {
-            #if !IDG_OMIT_ELAPSED_TIME
+#if !IDG_OMIT_ELAPSED_TIME
             lastElapsedSeconds = Time.realtimeSinceStartup;
-            #endif
-            #if !IDG_OMIT_FRAMECOUNT
+#endif
+#if !IDG_OMIT_FRAMECOUNT
             lastFrameCount = Time.frameCount;
-            #endif
+#endif
 
-            #if !UNITY_EDITOR && UNITY_ANDROID
+#if !UNITY_EDITOR && UNITY_ANDROID
 			if( logcatListener != null )
 			{
 				string log;
 				while( ( log = logcatListener.GetLog() ) != null )
 					ReceivedLog( "LOGCAT: " + log, string.Empty, LogType.Log );
 			}
-            #endif
+#endif
 
-            #if !ENABLE_INPUT_SYSTEM || ENABLE_LEGACY_INPUT_MANAGER
+#if !ENABLE_INPUT_SYSTEM || ENABLE_LEGACY_INPUT_MANAGER
 			// Toggling the console with toggleKey is handled in Update instead of LateUpdate because
 			// when we hide the console, we don't want the commandInputField to capture the toggleKey.
 			// InputField captures input in LateUpdate so deactivating it in Update ensures that
@@ -782,31 +689,31 @@ namespace IngameDebugConsole
 			// 			ShowLogWindow();
 			// 	}
 			// }
-            #endif
+#endif
         }
 
 
         private void LateUpdate()
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             if (isQuittingApplication)
             {
                 return;
             }
-            #endif
+#endif
 
-            var numberOfLogsToProcess = isLogWindowVisible ? queuedLogEntries.Count : queuedLogEntries.Count - queuedLogLimit;
+            var numberOfLogsToProcess = IsLogWindowVisible ? queuedLogEntries.Count : queuedLogEntries.Count - queuedLogLimit;
             ProcessQueuedLogs(numberOfLogsToProcess);
 
             if (uncollapsedLogEntries.Count >= maxLogCount)
             {
                 // If log window isn't visible, remove the logs over time (i.e. don't remove more than <see cref="logsToRemoveAfterMaxLogCount"/>) to avoid performance issues.
-                var numberOfLogsToRemove = Mathf.Min(!isLogWindowVisible ? logsToRemoveAfterMaxLogCount : uncollapsedLogEntries.Count - maxLogCount + logsToRemoveAfterMaxLogCount, uncollapsedLogEntries.Count);
+                var numberOfLogsToRemove = Mathf.Min(!IsLogWindowVisible ? logsToRemoveAfterMaxLogCount : uncollapsedLogEntries.Count - maxLogCount + logsToRemoveAfterMaxLogCount, uncollapsedLogEntries.Count);
                 RemoveOldestLogs(numberOfLogsToRemove);
             }
 
             // Don't perform CPU heavy tasks if neither the log window nor the popup is visible
-            if (!isLogWindowVisible && !PopupEnabled)
+            if (!IsLogWindowVisible && !PopupEnabled)
             {
                 return;
             }
@@ -831,7 +738,7 @@ namespace IngameDebugConsole
                 {
                     infoEntryCount += newInfoEntryCount;
 
-                    if (isLogWindowVisible)
+                    if (IsLogWindowVisible)
                     {
                         infoEntryCountText.text = infoEntryCount.ToString();
                     }
@@ -841,7 +748,7 @@ namespace IngameDebugConsole
                 {
                     warningEntryCount += newWarningEntryCount;
 
-                    if (isLogWindowVisible)
+                    if (IsLogWindowVisible)
                     {
                         warningEntryCountText.text = warningEntryCount.ToString();
                     }
@@ -851,14 +758,14 @@ namespace IngameDebugConsole
                 {
                     errorEntryCount += newErrorEntryCount;
 
-                    if (isLogWindowVisible)
+                    if (IsLogWindowVisible)
                     {
                         errorEntryCountText.text = errorEntryCount.ToString();
                     }
                 }
 
                 // If debug popup is visible, notify it of the new debug entries
-                if (!isLogWindowVisible)
+                if (!IsLogWindowVisible)
                 {
                     entryCountTextsDirty = true;
 
@@ -879,7 +786,7 @@ namespace IngameDebugConsole
                 }
             }
 
-            if (isLogWindowVisible)
+            if (IsLogWindowVisible)
             {
                 // Update visible logs if necessary
                 if (shouldUpdateRecycledListView)
@@ -972,15 +879,15 @@ namespace IngameDebugConsole
 
                 if (commandInputField.isFocused && commandHistory.Count > 0)
                 {
-                    #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
                     if (Keyboard.current != null)
-                        #endif
+#endif
                     {
-                        #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
                         if (Keyboard.current[Key.UpArrow].wasPressedThisFrame)
-                            #else
+#else
 						if( Input.GetKeyDown( KeyCode.UpArrow ) )
-                            #endif
+#endif
                         {
                             if (commandHistoryIndex == -1)
                             {
@@ -995,11 +902,11 @@ namespace IngameDebugConsole
                             commandInputField.text = commandHistory[commandHistoryIndex];
                             commandInputField.caretPosition = commandInputField.text.Length;
                         }
-                        #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
                         else if (Keyboard.current[Key.DownArrow].wasPressedThisFrame && commandHistoryIndex != -1)
-                            #else
+#else
 						else if( Input.GetKeyDown( KeyCode.DownArrow ) && commandHistoryIndex != -1 )
-                            #endif
+#endif
                         {
                             if (++commandHistoryIndex < commandHistory.Count)
                             {
@@ -1018,7 +925,7 @@ namespace IngameDebugConsole
             if (screenDimensionsChanged)
             {
                 // Update the recycled list view
-                if (isLogWindowVisible)
+                if (IsLogWindowVisible)
                 {
                     recycledListView.OnViewportHeightChanged();
                 }
@@ -1027,9 +934,9 @@ namespace IngameDebugConsole
                     popupManager.UpdatePosition(true);
                 }
 
-                #if UNITY_EDITOR || UNITY_ANDROID || UNITY_IOS
+#if UNITY_EDITOR || UNITY_ANDROID || UNITY_IOS
                 CheckScreenCutout();
-                #endif
+#endif
 
                 screenDimensionsChanged = false;
             }
@@ -1049,15 +956,15 @@ namespace IngameDebugConsole
             // (in case new entries were intercepted while log window was hidden)
             OnLogEntriesUpdated(true, true);
 
-            #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
+#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
             // Focus on the command input field on standalone platforms when the console is opened
             if (autoFocusOnCommandInputField)
             {
                 StartCoroutine(ActivateCommandInputFieldCoroutine());
             }
-            #endif
+#endif
 
-            isLogWindowVisible = true;
+            IsLogWindowVisible = true;
 
             if (OnLogWindowShown != null)
             {
@@ -1083,7 +990,7 @@ namespace IngameDebugConsole
                 popupManager.Show();
             }
 
-            isLogWindowVisible = false;
+            IsLogWindowVisible = false;
 
             // Deselect the currently selected UI object (if any) when the log window is hidden to avoid edge cases: https://github.com/yasirkula/UnityIngameDebugConsole/pull/85
             if (EventSystem.current != null)
@@ -1157,12 +1064,12 @@ namespace IngameDebugConsole
         // A debug entry is received
         public void ReceivedLog(string logString, string stackTrace, LogType logType)
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             if (isQuittingApplication)
             {
                 return;
             }
-            #endif
+#endif
 
             switch (logType)
             {
@@ -1247,15 +1154,15 @@ namespace IngameDebugConsole
             {
                 // It is 10 times faster to cache local time's offset from UtcNow and add it to UtcNow to get local time at any time
                 var dateTime = DateTime.UtcNow + localTimeUtcOffset;
-                #if !IDG_OMIT_ELAPSED_TIME && !IDG_OMIT_FRAMECOUNT
+#if !IDG_OMIT_ELAPSED_TIME && !IDG_OMIT_FRAMECOUNT
                 queuedLogEntryTimestamp = new DebugLogEntryTimestamp(dateTime, lastElapsedSeconds, lastFrameCount);
-                #elif !IDG_OMIT_ELAPSED_TIME
+#elif !IDG_OMIT_ELAPSED_TIME
 				queuedLogEntryTimestamp = new DebugLogEntryTimestamp( dateTime, lastElapsedSeconds );
-                #elif !IDG_OMIT_FRAMECOUNT
+#elif !IDG_OMIT_FRAMECOUNT
 				queuedLogEntryTimestamp = new DebugLogEntryTimestamp( dateTime, lastFrameCount );
-                #else
+#else
 				queuedLogEntryTimestamp = new DebugLogEntryTimestamp( dateTime );
-                #endif
+#endif
             }
             else
             {
@@ -1350,7 +1257,7 @@ namespace IngameDebugConsole
             {
                 // It is not a duplicate,
                 // add it to the list of unique debug entries
-                logEntry.logTypeSpriteRepresentation = logSpriteRepresentations[(int) logType];
+                logEntry.logTypeSpriteRepresentation = logSpriteRepresentations[(int)logType];
                 logEntry.collapsedIndex = collapsedLogEntries.Count;
 
                 collapsedLogEntries.Add(logEntry);
@@ -1384,7 +1291,7 @@ namespace IngameDebugConsole
 
             if (isCollapseOn && isEntryInCollapsedEntryList)
             {
-                if (isLogWindowVisible || timestampsOfLogEntriesToShow != null)
+                if (IsLogWindowVisible || timestampsOfLogEntriesToShow != null)
                 {
                     if (!isInSearchMode && logFilter == DebugLogFilter.All)
                     {
@@ -1402,7 +1309,7 @@ namespace IngameDebugConsole
                             timestampsOfLogEntriesToShow[logEntryIndexInEntriesToShow] = timestamp;
                         }
 
-                        if (isLogWindowVisible)
+                        if (IsLogWindowVisible)
                         {
                             recycledListView.OnCollapsedLogEntryAtIndexUpdated(logEntryIndexInEntriesToShow);
                         }
@@ -1484,12 +1391,12 @@ namespace IngameDebugConsole
 
                 recycledListView.OnLogEntriesRemoved(removedLogEntriesToShowCount);
 
-                if (isLogWindowVisible)
+                if (IsLogWindowVisible)
                 {
                     OnLogEntriesUpdated(false, true);
                 }
             }
-            else if (isLogWindowVisible && isCollapseOn)
+            else if (IsLogWindowVisible && isCollapseOn)
             {
                 recycledListView.RefreshCollapsedLogEntryCounts();
             }
@@ -1902,7 +1809,7 @@ namespace IngameDebugConsole
             // To be able to maximize the log window easily:
             // - When enableHorizontalResizing is true and resizing horizontally, resize button will be grabbed from its left edge (if resizeFromRight is true) or its right edge
             // - While resizing vertically, resize button will be grabbed from its top edge
-            var resizeButtonRect = ((RectTransform) resizeButton.rectTransform.parent).rect;
+            var resizeButtonRect = ((RectTransform)resizeButton.rectTransform.parent).rect;
             var resizeButtonWidth = resizeButtonRect.width;
             var resizeButtonHeight = resizeButtonRect.height;
 
@@ -2106,7 +2013,7 @@ namespace IngameDebugConsole
                 return;
             }
 
-            #if UNITY_2017_2_OR_NEWER && ( UNITY_EDITOR || UNITY_ANDROID || UNITY_IOS )
+#if UNITY_2017_2_OR_NEWER && ( UNITY_EDITOR || UNITY_ANDROID || UNITY_IOS )
             // Check if there is a cutout at the top of the screen
             var screenHeight = Screen.height;
             var safeYMax = Screen.safeArea.yMax;
@@ -2125,11 +2032,11 @@ namespace IngameDebugConsole
                 logWindowTR.anchoredPosition = Vector2.zero;
                 logWindowTR.sizeDelta = Vector2.zero;
             }
-            #endif
+#endif
         }
 
 
-        #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
+#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
         private IEnumerator ActivateCommandInputFieldCoroutine()
         {
             // Waiting 1 frame before activating commandInputField ensures that the toggleKey isn't captured by it
@@ -2139,7 +2046,7 @@ namespace IngameDebugConsole
             yield return null;
             commandInputField.MoveTextEnd(false);
         }
-        #endif
+#endif
 
 
         // Pool an unused log item

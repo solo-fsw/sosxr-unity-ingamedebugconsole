@@ -15,7 +15,7 @@ namespace IngameDebugConsole
     {
         #region Platform Specific Elements
 
-        #if !UNITY_2018_1_OR_NEWER
+#if !UNITY_2018_1_OR_NEWER
 #if !UNITY_EDITOR && UNITY_ANDROID
 		private static AndroidJavaClass m_ajc = null;
 		private static AndroidJavaClass AJC
@@ -49,42 +49,33 @@ namespace IngameDebugConsole
 		[System.Runtime.InteropServices.DllImport( "__Internal" )]
 		private static extern void _DebugConsole_CopyText( string text );
 #endif
-        #endif
+#endif
 
         #endregion
 
-        #pragma warning disable 0649
+#pragma warning disable 0649
         // Cached components
-        [SerializeField]
-        private RectTransform transformComponent;
+        [SerializeField] private RectTransform transformComponent;
         public RectTransform Transform => transformComponent;
 
-        [SerializeField]
-        private Image imageComponent;
+        [SerializeField] private Image imageComponent;
         public Image Image => imageComponent;
 
-        [SerializeField]
-        private CanvasGroup canvasGroupComponent;
+        [SerializeField] private CanvasGroup canvasGroupComponent;
         public CanvasGroup CanvasGroup => canvasGroupComponent;
 
-        [SerializeField]
-        private Text logText;
-        [SerializeField]
-        private Image logTypeImage;
+        [SerializeField] private Text logText;
+        [SerializeField] private Image logTypeImage;
 
         // Objects related to the collapsed count of the debug entry
-        [SerializeField]
-        private GameObject logCountParent;
-        [SerializeField]
-        private Text logCountText;
+        [SerializeField] private GameObject logCountParent;
+        [SerializeField] private Text logCountText;
 
-        [SerializeField]
-        private RectTransform copyLogButton;
-        #pragma warning restore 0649
+        [SerializeField] private RectTransform copyLogButton;
+#pragma warning restore 0649
 
         // Debug entry to show with this log item
-        private DebugLogEntry logEntry;
-        public DebugLogEntry Entry => logEntry;
+        public DebugLogEntry Entry { get; private set; }
 
         private DebugLogEntryTimestamp? logEntryTimestamp;
         public DebugLogEntryTimestamp? Timestamp => logEntryTimestamp;
@@ -92,8 +83,7 @@ namespace IngameDebugConsole
         // Index of the entry in the list of entries
         [NonSerialized] public int Index;
 
-        private bool isExpanded;
-        public bool Expanded => isExpanded;
+        public bool Expanded { get; private set; }
 
         private Vector2 logTextOriginalPosition;
         private Vector2 logTextOriginalSize;
@@ -110,18 +100,18 @@ namespace IngameDebugConsole
             logTextOriginalSize = logText.rectTransform.sizeDelta;
             copyLogButtonHeight = copyLogButton.anchoredPosition.y + copyLogButton.sizeDelta.y + 2f; // 2f: space between text and button
 
-            #if !UNITY_EDITOR && UNITY_WEBGL
+#if !UNITY_EDITOR && UNITY_WEBGL
 			copyLogButton.gameObject.AddComponent<DebugLogItemCopyWebGL>().Initialize( this );
-            #endif
+#endif
         }
 
 
         public void SetContent(DebugLogEntry logEntry, DebugLogEntryTimestamp? logEntryTimestamp, int entryIndex, bool isExpanded)
         {
-            this.logEntry = logEntry;
+            this.Entry = logEntry;
             this.logEntryTimestamp = logEntryTimestamp;
             Index = entryIndex;
-            this.isExpanded = isExpanded;
+            this.Expanded = isExpanded;
 
             var size = transformComponent.sizeDelta;
 
@@ -162,7 +152,7 @@ namespace IngameDebugConsole
         // Show the collapsed count of the debug entry
         public void ShowCount()
         {
-            logCountText.text = logEntry.count.ToString();
+            logCountText.text = Entry.count.ToString();
 
             if (!logCountParent.activeSelf)
             {
@@ -186,9 +176,9 @@ namespace IngameDebugConsole
         {
             logEntryTimestamp = timestamp;
 
-            if (isExpanded || listView.manager.alwaysDisplayTimestamps)
+            if (Expanded || listView.manager.alwaysDisplayTimestamps)
             {
-                SetText(logEntry, timestamp, isExpanded);
+                SetText(Entry, timestamp, Expanded);
             }
         }
 
@@ -223,14 +213,14 @@ namespace IngameDebugConsole
         // This log item is clicked, show the debug entry's stack trace
         public void OnPointerClick(PointerEventData eventData)
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             if (eventData.button == PointerEventData.InputButton.Right)
             {
-                var regex = Regex.Match(logEntry.stackTrace, @"\(at .*\.cs:[0-9]+\)$", RegexOptions.Multiline);
+                var regex = Regex.Match(Entry.stackTrace, @"\(at .*\.cs:[0-9]+\)$", RegexOptions.Multiline);
 
                 if (regex.Success)
                 {
-                    var line = logEntry.stackTrace.Substring(regex.Index + 4, regex.Length - 5);
+                    var line = Entry.stackTrace.Substring(regex.Index + 4, regex.Length - 5);
                     var lineSeparator = line.IndexOf(':');
                     var script = AssetDatabase.LoadAssetAtPath<MonoScript>(line.Substring(0, lineSeparator));
 
@@ -244,15 +234,15 @@ namespace IngameDebugConsole
             {
                 listView.OnLogItemClicked(this);
             }
-            #else
+#else
 			listView.OnLogItemClicked( this );
-            #endif
+#endif
         }
 
 
         public void CopyLog()
         {
-            #if UNITY_EDITOR || !UNITY_WEBGL
+#if UNITY_EDITOR || !UNITY_WEBGL
             var log = GetCopyContent();
 
             if (string.IsNullOrEmpty(log))
@@ -260,14 +250,14 @@ namespace IngameDebugConsole
                 return;
             }
 
-            #if UNITY_EDITOR || UNITY_2018_1_OR_NEWER || ( !UNITY_ANDROID && !UNITY_IOS )
+#if UNITY_EDITOR || UNITY_2018_1_OR_NEWER || ( !UNITY_ANDROID && !UNITY_IOS )
             GUIUtility.systemCopyBuffer = log;
-            #elif UNITY_ANDROID
+#elif UNITY_ANDROID
 			AJC.CallStatic( "CopyText", Context, log );
-            #elif UNITY_IOS
+#elif UNITY_IOS
 			_DebugConsole_CopyText( log );
-            #endif
-            #endif
+#endif
+#endif
         }
 
 
@@ -275,14 +265,14 @@ namespace IngameDebugConsole
         {
             if (!logEntryTimestamp.HasValue)
             {
-                return logEntry.ToString();
+                return Entry.ToString();
             }
 
             var sb = listView.manager.sharedStringBuilder;
             sb.Length = 0;
 
             logEntryTimestamp.Value.AppendFullTimestamp(sb);
-            sb.Append(": ").Append(logEntry);
+            sb.Append(": ").Append(Entry);
 
             return sb.ToString();
         }
@@ -308,7 +298,7 @@ namespace IngameDebugConsole
         // Return a string containing complete information about the debug entry
         public override string ToString()
         {
-            return logEntry.ToString();
+            return Entry.ToString();
         }
     }
 }

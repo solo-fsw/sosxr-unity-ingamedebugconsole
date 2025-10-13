@@ -1,20 +1,21 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-
 namespace IngameDebugConsole
 {
     [CustomEditor(typeof(DebugLogManager))]
     public class DebugLogManagerEditor : Editor
     {
-        #if UNITY_2017_3_OR_NEWER
+#if UNITY_2017_3_OR_NEWER
         private readonly GUIContent popupVisibilityLogFilterLabel = new("Log Filter", "Determines which log types will show the popup on screen");
-        #endif
+#endif
         private readonly GUIContent receivedLogTypesLabel = new("Received Log Types", "Only these logs will be received by the console window, other logs will simply be skipped");
         private readonly GUIContent receiveInfoLogsLabel = new("Info");
         private readonly GUIContent receiveWarningLogsLabel = new("Warning");
         private readonly GUIContent receiveErrorLogsLabel = new("Error");
+
         private readonly GUIContent receiveExceptionLogsLabel = new("Exception");
+
         //private SerializedProperty singleton;
         private SerializedProperty minimumHeight;
         private SerializedProperty enableHorizontalResizing;
@@ -61,11 +62,11 @@ namespace IngameDebugConsole
             popupVisibilityLogFilter = serializedObject.FindProperty("popupVisibilityLogFilter");
             startMinimized = serializedObject.FindProperty("startMinimized");
 
-            #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
 
-            #else
+#else
 			//toggleKey = serializedObject.FindProperty( "toggleKey" );
-            #endif
+#endif
             enableSearchbar = serializedObject.FindProperty("enableSearchbar");
             topSearchbarMinWidth = serializedObject.FindProperty("topSearchbarMinWidth");
             receiveLogsWhileInactive = serializedObject.FindProperty("receiveLogsWhileInactive");
@@ -118,14 +119,14 @@ namespace IngameDebugConsole
 
             EditorGUILayout.PropertyField(popupVisibility);
 
-            if (popupVisibility.intValue == (int) PopupVisibility.WhenLogReceived)
+            if (popupVisibility.intValue == (int)PopupVisibility.WhenLogReceived)
             {
                 EditorGUI.indentLevel++;
-                #if UNITY_2017_3_OR_NEWER
+#if UNITY_2017_3_OR_NEWER
                 var rect = EditorGUILayout.GetControlRect();
                 EditorGUI.BeginProperty(rect, GUIContent.none, popupVisibilityLogFilter);
-                popupVisibilityLogFilter.intValue = (int) (DebugLogFilter) EditorGUI.EnumFlagsField(rect, popupVisibilityLogFilterLabel, (DebugLogFilter) popupVisibilityLogFilter.intValue);
-                #else
+                popupVisibilityLogFilter.intValue = (int)(DebugLogFilter)EditorGUI.EnumFlagsField(rect, popupVisibilityLogFilterLabel, (DebugLogFilter)popupVisibilityLogFilter.intValue);
+#else
 				EditorGUI.BeginProperty( new Rect(), GUIContent.none, popupVisibilityLogFilter );
 				EditorGUI.BeginChangeCheck();
 
@@ -135,7 +136,7 @@ namespace IngameDebugConsole
 
 				if( EditorGUI.EndChangeCheck() )
 					popupVisibilityLogFilter.intValue = ( infoLog ? (int) DebugLogFilter.Info : 0 ) | ( warningLog ? (int) DebugLogFilter.Warning : 0 ) | ( errorLog ? (int) DebugLogFilter.Error : 0 );
-                #endif
+#endif
                 EditorGUI.EndProperty();
                 EditorGUI.indentLevel--;
             }

@@ -15,26 +15,24 @@ namespace IngameDebugConsole
         internal DebugLogManager manager;
         private ScrollRect scrollView;
 
-        private float logItemHeight;
-
-        private DynamicCircularBuffer<DebugLogEntry> entriesToShow = null;
-        private DynamicCircularBuffer<DebugLogEntryTimestamp> timestampsOfEntriesToShow = null;
+        private DynamicCircularBuffer<DebugLogEntry> entriesToShow;
+        private DynamicCircularBuffer<DebugLogEntryTimestamp> timestampsOfEntriesToShow;
 
         private DebugLogEntry selectedLogEntry;
         private int indexOfSelectedLogEntry = int.MaxValue;
-        private float heightOfSelectedLogEntry;
 
-        private bool isCollapseOn = false;
+        private bool isCollapseOn;
 
         // Current indices of debug entries shown on screen
         private int currentTopIndex = -1, currentBottomIndex = -1;
 
         private Predicate<DebugLogItem> shouldRemoveLogItemPredicate;
         private Action<DebugLogItem> poolLogItemAction;
-        private float DeltaHeightOfSelectedLogEntry => heightOfSelectedLogEntry - logItemHeight;
+        private float DeltaHeightOfSelectedLogEntry => SelectedItemHeight - ItemHeight;
 
-        public float ItemHeight => logItemHeight;
-        public float SelectedItemHeight => heightOfSelectedLogEntry;
+        public float ItemHeight { get; private set; }
+
+        public float SelectedItemHeight { get; private set; }
 
 
         private void Awake()
@@ -56,7 +54,7 @@ namespace IngameDebugConsole
             this.manager = manager;
             this.entriesToShow = entriesToShow;
             this.timestampsOfEntriesToShow = timestampsOfEntriesToShow;
-            this.logItemHeight = logItemHeight;
+            this.ItemHeight = logItemHeight;
 
             shouldRemoveLogItemPredicate = ShouldRemoveLogItem;
             poolLogItemAction = manager.PoolLogItem;
@@ -87,7 +85,7 @@ namespace IngameDebugConsole
             var viewportHeight = viewportTransform.rect.height;
             var transformComponentCenterYAtTop = viewportHeight * 0.5f;
             var transformComponentCenterYAtBottom = transformComponent.sizeDelta.y - viewportHeight * 0.5f;
-            var transformComponentTargetCenterY = itemIndex * logItemHeight + viewportHeight * 0.5f;
+            var transformComponentTargetCenterY = itemIndex * ItemHeight + viewportHeight * 0.5f;
 
             if (transformComponentCenterYAtTop == transformComponentCenterYAtBottom)
             {
@@ -128,7 +126,7 @@ namespace IngameDebugConsole
         {
             selectedLogEntry = null;
             indexOfSelectedLogEntry = int.MaxValue;
-            heightOfSelectedLogEntry = 0f;
+            SelectedItemHeight = 0f;
         }
 
 
@@ -297,7 +295,7 @@ namespace IngameDebugConsole
 
         private void CalculateContentHeight()
         {
-            var newHeight = Mathf.Max(1f, entriesToShow.Count * logItemHeight);
+            var newHeight = Mathf.Max(1f, entriesToShow.Count * ItemHeight);
 
             if (selectedLogEntry != null)
             {
@@ -325,7 +323,7 @@ namespace IngameDebugConsole
                 referenceItem = visibleLogItems[0];
             }
 
-            heightOfSelectedLogEntry = referenceItem.CalculateExpandedHeight(selectedLogEntry, timestampsOfEntriesToShow != null ? timestampsOfEntriesToShow[indexOfSelectedLogEntry] : null);
+            SelectedItemHeight = referenceItem.CalculateExpandedHeight(selectedLogEntry, timestampsOfEntriesToShow != null ? timestampsOfEntriesToShow[indexOfSelectedLogEntry] : null);
         }
 
 
@@ -337,7 +335,7 @@ namespace IngameDebugConsole
             {
                 var contentPosTop = transformComponent.anchoredPosition.y - 1f;
                 var contentPosBottom = contentPosTop + viewportTransform.rect.height + 2f;
-                var positionOfSelectedLogEntry = indexOfSelectedLogEntry * logItemHeight;
+                var positionOfSelectedLogEntry = indexOfSelectedLogEntry * ItemHeight;
 
                 if (positionOfSelectedLogEntry <= contentPosBottom)
                 {
@@ -352,8 +350,8 @@ namespace IngameDebugConsole
                     }
                 }
 
-                var newBottomIndex = Mathf.Min((int) (contentPosBottom / logItemHeight), entriesToShow.Count - 1);
-                var newTopIndex = Mathf.Clamp((int) (contentPosTop / logItemHeight), 0, newBottomIndex);
+                var newBottomIndex = Mathf.Min((int)(contentPosBottom / ItemHeight), entriesToShow.Count - 1);
+                var newTopIndex = Mathf.Clamp((int)(contentPosTop / ItemHeight), 0, newBottomIndex);
 
                 if (currentTopIndex == -1)
                 {
@@ -482,7 +480,7 @@ namespace IngameDebugConsole
         private void RepositionLogItem(DebugLogItem logItem)
         {
             var index = logItem.Index;
-            var anchoredPosition = new Vector2(1f, -index * logItemHeight);
+            var anchoredPosition = new Vector2(1f, -index * ItemHeight);
 
             if (index > indexOfSelectedLogEntry)
             {
@@ -510,19 +508,14 @@ namespace IngameDebugConsole
                 logItem.Image.color = logItemNormalColor2;
             }
         }
-        #pragma warning disable 0649
+#pragma warning disable 0649
         // Cached components
-        [SerializeField]
-        private RectTransform transformComponent;
-        [SerializeField]
-        private RectTransform viewportTransform;
+        [SerializeField] private RectTransform transformComponent;
+        [SerializeField] private RectTransform viewportTransform;
 
-        [SerializeField]
-        private Color logItemNormalColor1;
-        [SerializeField]
-        private Color logItemNormalColor2;
-        [SerializeField]
-        private Color logItemSelectedColor;
-        #pragma warning restore 0649
+        [SerializeField] private Color logItemNormalColor1;
+        [SerializeField] private Color logItemNormalColor2;
+        [SerializeField] private Color logItemSelectedColor;
+#pragma warning restore 0649
     }
 }

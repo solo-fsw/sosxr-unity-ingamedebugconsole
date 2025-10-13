@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 public class CreateDemoLogs : MonoBehaviour
 {
     public string IdentifyerText;

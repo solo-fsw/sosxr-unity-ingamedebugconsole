@@ -24,15 +24,15 @@ namespace IngameDebugConsole
         private CanvasGroup canvasGroup;
 
         // Number of new debug entries since the log window has been closed
-        private int newInfoCount = 0, newWarningCount = 0, newErrorCount = 0;
+        private int newInfoCount, newWarningCount, newErrorCount;
 
         private Color normalColor;
 
-        private bool isPopupBeingDragged = false;
+        private bool isPopupBeingDragged;
         private Vector2 normalizedPosition;
 
         // Coroutines for simple code-based animations
-        private IEnumerator moveToPosCoroutine = null;
+        private IEnumerator moveToPosCoroutine;
 
         public bool IsVisible { get; private set; }
 
@@ -83,7 +83,7 @@ namespace IngameDebugConsole
 
         private void Awake()
         {
-            popupTransform = (RectTransform) transform;
+            popupTransform = (RectTransform)transform;
             backgroundImage = GetComponent<Image>();
             canvasGroup = GetComponent<CanvasGroup>();
 
@@ -212,7 +212,7 @@ namespace IngameDebugConsole
 
             if (debugManager.popupAvoidsScreenCutout)
             {
-                #if UNITY_2017_2_OR_NEWER && ( UNITY_EDITOR || UNITY_ANDROID || UNITY_IOS )
+#if UNITY_2017_2_OR_NEWER && ( UNITY_EDITOR || UNITY_ANDROID || UNITY_IOS )
                 var safeArea = Screen.safeArea;
 
                 var screenWidth = Screen.width;
@@ -223,7 +223,7 @@ namespace IngameDebugConsole
 
                 canvasBottomLeftX = canvasRawSize.x * (safeArea.x / screenWidth);
                 canvasBottomLeftY = canvasRawSize.y * (safeArea.y / screenHeight);
-                #endif
+#endif
             }
 
             // Calculate safe area position of the popup
@@ -298,23 +298,16 @@ namespace IngameDebugConsole
         }
 
 
-        #pragma warning disable 0649
-        [SerializeField]
-        private DebugLogManager debugManager;
+#pragma warning disable 0649
+        [SerializeField] private DebugLogManager debugManager;
 
-        [SerializeField]
-        private Text newInfoCountText;
-        [SerializeField]
-        private Text newWarningCountText;
-        [SerializeField]
-        private Text newErrorCountText;
+        [SerializeField] private Text newInfoCountText;
+        [SerializeField] private Text newWarningCountText;
+        [SerializeField] private Text newErrorCountText;
 
-        [SerializeField]
-        private Color alertColorInfo;
-        [SerializeField]
-        private Color alertColorWarning;
-        [SerializeField]
-        private Color alertColorError;
-        #pragma warning restore 0649
+        [SerializeField] private Color alertColorInfo;
+        [SerializeField] private Color alertColorWarning;
+        [SerializeField] private Color alertColorError;
+#pragma warning restore 0649
     }
 }
