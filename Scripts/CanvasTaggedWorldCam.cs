@@ -1,5 +1,6 @@
 using UnityEngine;
 
+
 namespace SOSXR.IngameDebugConsole
 {
     [RequireComponent(typeof(Canvas))]

@@ -111,30 +111,30 @@ namespace IngameDebugConsole
     public struct DebugLogEntryTimestamp
     {
         public readonly DateTime dateTime;
-#if !IDG_OMIT_ELAPSED_TIME
+        #if !IDG_OMIT_ELAPSED_TIME
         public readonly float elapsedSeconds;
-#endif
-#if !IDG_OMIT_FRAMECOUNT
+        #endif
+        #if !IDG_OMIT_FRAMECOUNT
         public readonly int frameCount;
-#endif
+        #endif
 
-#if !IDG_OMIT_ELAPSED_TIME && !IDG_OMIT_FRAMECOUNT
+        #if !IDG_OMIT_ELAPSED_TIME && !IDG_OMIT_FRAMECOUNT
         public DebugLogEntryTimestamp(DateTime dateTime, float elapsedSeconds, int frameCount)
-#elif !IDG_OMIT_ELAPSED_TIME
+            #elif !IDG_OMIT_ELAPSED_TIME
 		public DebugLogEntryTimestamp( System.DateTime dateTime, float elapsedSeconds )
-#elif !IDG_OMIT_FRAMECOUNT
+            #elif !IDG_OMIT_FRAMECOUNT
 		public DebugLogEntryTimestamp( System.DateTime dateTime, int frameCount )
-#else
+            #else
 		public DebugLogEntryTimestamp( System.DateTime dateTime )
-#endif
+            #endif
         {
             this.dateTime = dateTime;
-#if !IDG_OMIT_ELAPSED_TIME
+            #if !IDG_OMIT_ELAPSED_TIME
             this.elapsedSeconds = elapsedSeconds;
-#endif
-#if !IDG_OMIT_FRAMECOUNT
+            #endif
+            #if !IDG_OMIT_FRAMECOUNT
             this.frameCount = frameCount;
-#endif
+            #endif
         }
 
 
@@ -188,16 +188,16 @@ namespace IngameDebugConsole
         {
             AppendTime(sb);
 
-#if !IDG_OMIT_ELAPSED_TIME && !IDG_OMIT_FRAMECOUNT
+            #if !IDG_OMIT_ELAPSED_TIME && !IDG_OMIT_FRAMECOUNT
             // Append elapsed seconds and frame count in format: [1.0s at #Frame]
             sb.Append("[").Append(elapsedSeconds.ToString("F1")).Append("s at ").Append("#").Append(frameCount).Append("]");
-#elif !IDG_OMIT_ELAPSED_TIME
+            #elif !IDG_OMIT_ELAPSED_TIME
 			// Append elapsed seconds in format: [1.0s]
 			sb.Append( "[" ).Append( elapsedSeconds.ToString( "F1" ) ).Append( "s]" );
-#elif !IDG_OMIT_FRAMECOUNT
+            #elif !IDG_OMIT_FRAMECOUNT
 			// Append frame count in format: [#Frame]
 			sb.Append( "[#" ).Append( frameCount ).Append( "]" );
-#endif
+            #endif
         }
     }
 

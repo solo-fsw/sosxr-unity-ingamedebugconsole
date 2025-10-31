@@ -1,5 +1,6 @@
 ﻿using System;
 
+
 namespace IngameDebugConsole
 {
     [AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = true)]

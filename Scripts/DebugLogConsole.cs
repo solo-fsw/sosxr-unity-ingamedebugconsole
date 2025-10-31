@@ -66,15 +66,15 @@ namespace IngameDebugConsole
 
         static DebugLogConsole()
         {
-#if !IDG_DISABLE_HELP_COMMAND
+            #if !IDG_DISABLE_HELP_COMMAND
             AddCommand("help", "Prints all commands", LogAllCommands);
             AddCommand<string>("help", "Prints all matching commands", LogAllCommandsWithName);
-#endif
-#if IDG_ENABLE_HELPER_COMMANDS || IDG_ENABLE_SYSINFO_COMMAND
+            #endif
+            #if IDG_ENABLE_HELPER_COMMANDS || IDG_ENABLE_SYSINFO_COMMAND
 			AddCommand( "sysinfo", "Prints system information", LogSystemInfo );
-#endif
+            #endif
 
-#if UNITY_EDITOR || !NETFX_CORE
+            #if UNITY_EDITOR || !NETFX_CORE
             // Find all [ConsoleMethod] functions
             // Don't search built-in assemblies for console methods since they can't have any
             string[] ignoredAssemblies =
@@ -91,31 +91,31 @@ namespace IngameDebugConsole
                 "UnityScript.",
                 "ICSharpCode.",
                 "ExCSS.Unity",
-#if UNITY_EDITOR
+                #if UNITY_EDITOR
                 "Assembly-CSharp-Editor",
                 "Assembly-UnityScript-Editor",
                 "nunit.",
                 "SyntaxTree.",
                 "AssetStoreTools",
-#endif
+                #endif
             };
-#endif
+            #endif
 
-#if UNITY_EDITOR || !NETFX_CORE
+            #if UNITY_EDITOR || !NETFX_CORE
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-#else
+                #else
 			foreach( Assembly assembly in new Assembly[] { typeof( DebugLogConsole ).Assembly } ) // On UWP, at least search this plugin's Assembly for console methods
-#endif
+                #endif
             {
-#if( NET_4_6 || NET_STANDARD_2_0 ) && ( UNITY_EDITOR || !NETFX_CORE )
+                #if( NET_4_6 || NET_STANDARD_2_0 ) && ( UNITY_EDITOR || !NETFX_CORE )
                 if (assembly.IsDynamic)
                 {
                     continue;
                 }
-#endif
+                #endif
 
 
-#if UNITY_EDITOR || !NETFX_CORE
+                #if UNITY_EDITOR || !NETFX_CORE
                 var assemblyName = assembly.GetName().Name;
                 var ignoreAssembly = false;
 
@@ -133,7 +133,7 @@ namespace IngameDebugConsole
                 {
                     continue;
                 }
-#endif
+                #endif
 
                 SearchAssemblyForConsoleMethods(assembly);
             }
@@ -147,62 +147,62 @@ namespace IngameDebugConsole
         // All the parse functions
         private static readonly Dictionary<Type, ParseFunction> parseFunctions = new()
         {
-            { typeof(string), ParseString },
-            { typeof(bool), ParseBool },
-            { typeof(int), ParseInt },
-            { typeof(uint), ParseUInt },
-            { typeof(long), ParseLong },
-            { typeof(ulong), ParseULong },
-            { typeof(byte), ParseByte },
-            { typeof(sbyte), ParseSByte },
-            { typeof(short), ParseShort },
-            { typeof(ushort), ParseUShort },
-            { typeof(char), ParseChar },
-            { typeof(float), ParseFloat },
-            { typeof(double), ParseDouble },
-            { typeof(decimal), ParseDecimal },
-            { typeof(Vector2), ParseVector2 },
-            { typeof(Vector3), ParseVector3 },
-            { typeof(Vector4), ParseVector4 },
-            { typeof(Quaternion), ParseQuaternion },
-            { typeof(Color), ParseColor },
-            { typeof(Color32), ParseColor32 },
-            { typeof(Rect), ParseRect },
-            { typeof(RectOffset), ParseRectOffset },
-            { typeof(Bounds), ParseBounds },
-            { typeof(GameObject), ParseGameObject },
-#if UNITY_2017_2_OR_NEWER
-            { typeof(Vector2Int), ParseVector2Int },
-            { typeof(Vector3Int), ParseVector3Int },
-            { typeof(RectInt), ParseRectInt },
-            { typeof(BoundsInt), ParseBoundsInt },
-#endif
+            {typeof(string), ParseString},
+            {typeof(bool), ParseBool},
+            {typeof(int), ParseInt},
+            {typeof(uint), ParseUInt},
+            {typeof(long), ParseLong},
+            {typeof(ulong), ParseULong},
+            {typeof(byte), ParseByte},
+            {typeof(sbyte), ParseSByte},
+            {typeof(short), ParseShort},
+            {typeof(ushort), ParseUShort},
+            {typeof(char), ParseChar},
+            {typeof(float), ParseFloat},
+            {typeof(double), ParseDouble},
+            {typeof(decimal), ParseDecimal},
+            {typeof(Vector2), ParseVector2},
+            {typeof(Vector3), ParseVector3},
+            {typeof(Vector4), ParseVector4},
+            {typeof(Quaternion), ParseQuaternion},
+            {typeof(Color), ParseColor},
+            {typeof(Color32), ParseColor32},
+            {typeof(Rect), ParseRect},
+            {typeof(RectOffset), ParseRectOffset},
+            {typeof(Bounds), ParseBounds},
+            {typeof(GameObject), ParseGameObject},
+            #if UNITY_2017_2_OR_NEWER
+            {typeof(Vector2Int), ParseVector2Int},
+            {typeof(Vector3Int), ParseVector3Int},
+            {typeof(RectInt), ParseRectInt},
+            {typeof(BoundsInt), ParseBoundsInt},
+            #endif
         };
 
         // All the readable names of accepted types
         private static readonly Dictionary<Type, string> typeReadableNames = new()
         {
-            { typeof(string), "String" },
-            { typeof(bool), "Boolean" },
-            { typeof(int), "Integer" },
-            { typeof(uint), "Unsigned Integer" },
-            { typeof(long), "Long" },
-            { typeof(ulong), "Unsigned Long" },
-            { typeof(byte), "Byte" },
-            { typeof(sbyte), "Short Byte" },
-            { typeof(short), "Short" },
-            { typeof(ushort), "Unsigned Short" },
-            { typeof(char), "Char" },
-            { typeof(float), "Float" },
-            { typeof(double), "Double" },
-            { typeof(decimal), "Decimal" }
+            {typeof(string), "String"},
+            {typeof(bool), "Boolean"},
+            {typeof(int), "Integer"},
+            {typeof(uint), "Unsigned Integer"},
+            {typeof(long), "Long"},
+            {typeof(ulong), "Unsigned Long"},
+            {typeof(byte), "Byte"},
+            {typeof(sbyte), "Short Byte"},
+            {typeof(short), "Short"},
+            {typeof(ushort), "Unsigned Short"},
+            {typeof(char), "Char"},
+            {typeof(float), "Float"},
+            {typeof(double), "Double"},
+            {typeof(decimal), "Decimal"}
         };
 
         // Split arguments of an entered command
         private static readonly List<string> commandArguments = new(8);
 
         // Command parameter delimeter groups
-        private static readonly string[] inputDelimiters = { "\"\"", "''", "{}", "()", "[]" };
+        private static readonly string[] inputDelimiters = {"\"\"", "''", "{}", "()", "[]"};
 
         // CompareInfo used for case-insensitive command name comparison
         internal static readonly CompareInfo caseInsensitiveComparer = new CultureInfo("en-US").CompareInfo;
@@ -332,13 +332,13 @@ namespace IngameDebugConsole
             var stringBuilder = new StringBuilder(1024);
 
             stringBuilder.Append("Rig: ").AppendSysInfoIfPresent(SystemInfo.deviceModel).AppendSysInfoIfPresent(SystemInfo.processorType)
-                .AppendSysInfoIfPresent(SystemInfo.systemMemorySize, "MB RAM").Append(SystemInfo.processorCount).Append(" cores\n");
+                         .AppendSysInfoIfPresent(SystemInfo.systemMemorySize, "MB RAM").Append(SystemInfo.processorCount).Append(" cores\n");
 
             stringBuilder.Append("OS: ").Append(SystemInfo.operatingSystem).Append("\n");
 
             stringBuilder.Append("GPU: ").Append(SystemInfo.graphicsDeviceName).Append(" ").Append(SystemInfo.graphicsMemorySize)
-                .Append("MB ").Append(SystemInfo.graphicsDeviceVersion)
-                .Append(SystemInfo.graphicsMultiThreaded ? " multi-threaded\n" : "\n");
+                         .Append("MB ").Append(SystemInfo.graphicsDeviceVersion)
+                         .Append(SystemInfo.graphicsMultiThreaded ? " multi-threaded\n" : "\n");
 
             stringBuilder.Append("Data Path: ").Append(Application.dataPath).Append("\n");
             stringBuilder.Append("Persistent Data Path: ").Append(Application.persistentDataPath).Append("\n");
@@ -346,24 +346,24 @@ namespace IngameDebugConsole
             stringBuilder.Append("Temporary Cache Path: ").Append(Application.temporaryCachePath).Append("\n");
             stringBuilder.Append("Device ID: ").Append(SystemInfo.deviceUniqueIdentifier).Append("\n");
             stringBuilder.Append("Max Texture Size: ").Append(SystemInfo.maxTextureSize).Append("\n");
-#if UNITY_5_6_OR_NEWER
+            #if UNITY_5_6_OR_NEWER
             stringBuilder.Append("Max Cubemap Size: ").Append(SystemInfo.maxCubemapSize).Append("\n");
-#endif
+            #endif
             stringBuilder.Append("Accelerometer: ").Append(SystemInfo.supportsAccelerometer ? "supported\n" : "not supported\n");
             stringBuilder.Append("Gyro: ").Append(SystemInfo.supportsGyroscope ? "supported\n" : "not supported\n");
             stringBuilder.Append("Location Service: ").Append(SystemInfo.supportsLocationService ? "supported\n" : "not supported\n");
-#if !UNITY_2019_1_OR_NEWER
+            #if !UNITY_2019_1_OR_NEWER
 			stringBuilder.Append( "Image Effects: " ).Append( SystemInfo.supportsImageEffects ? "supported\n" : "not supported\n" );
 			stringBuilder.Append( "RenderToCubemap: " ).Append( SystemInfo.supportsRenderToCubemap ? "supported\n" : "not supported\n" );
-#endif
+            #endif
             stringBuilder.Append("Compute Shaders: ").Append(SystemInfo.supportsComputeShaders ? "supported\n" : "not supported\n");
             stringBuilder.Append("Shadows: ").Append(SystemInfo.supportsShadows ? "supported\n" : "not supported\n");
             stringBuilder.Append("Instancing: ").Append(SystemInfo.supportsInstancing ? "supported\n" : "not supported\n");
             stringBuilder.Append("Motion Vectors: ").Append(SystemInfo.supportsMotionVectors ? "supported\n" : "not supported\n");
             stringBuilder.Append("3D Textures: ").Append(SystemInfo.supports3DTextures ? "supported\n" : "not supported\n");
-#if UNITY_5_6_OR_NEWER
+            #if UNITY_5_6_OR_NEWER
             stringBuilder.Append("3D Render Textures: ").Append(SystemInfo.supports3DRenderTextures ? "supported\n" : "not supported\n");
-#endif
+            #endif
             stringBuilder.Append("2D Array Textures: ").Append(SystemInfo.supports2DArrayTextures ? "supported\n" : "not supported\n");
             stringBuilder.Append("Cubemap Array Textures: ").Append(SystemInfo.supportsCubemapArrayTextures ? "supported" : "not supported");
 
@@ -536,49 +536,49 @@ namespace IngameDebugConsole
         // Add a command with custom parameter names
         public static void AddCommand<T1>(string command, string description, Action<T1> method, string parameterName)
         {
-            AddCommand(command, description, method.Method, method.Target, new string[1] { parameterName });
+            AddCommand(command, description, method.Method, method.Target, new string[1] {parameterName});
         }
 
 
         public static void AddCommand<T1, T2>(string command, string description, Action<T1, T2> method, string parameterName1, string parameterName2)
         {
-            AddCommand(command, description, method.Method, method.Target, new string[2] { parameterName1, parameterName2 });
+            AddCommand(command, description, method.Method, method.Target, new string[2] {parameterName1, parameterName2});
         }
 
 
         public static void AddCommand<T1, T2>(string command, string description, Func<T1, T2> method, string parameterName)
         {
-            AddCommand(command, description, method.Method, method.Target, new string[1] { parameterName });
+            AddCommand(command, description, method.Method, method.Target, new string[1] {parameterName});
         }
 
 
         public static void AddCommand<T1, T2, T3>(string command, string description, Action<T1, T2, T3> method, string parameterName1, string parameterName2, string parameterName3)
         {
-            AddCommand(command, description, method.Method, method.Target, new string[3] { parameterName1, parameterName2, parameterName3 });
+            AddCommand(command, description, method.Method, method.Target, new string[3] {parameterName1, parameterName2, parameterName3});
         }
 
 
         public static void AddCommand<T1, T2, T3>(string command, string description, Func<T1, T2, T3> method, string parameterName1, string parameterName2)
         {
-            AddCommand(command, description, method.Method, method.Target, new string[2] { parameterName1, parameterName2 });
+            AddCommand(command, description, method.Method, method.Target, new string[2] {parameterName1, parameterName2});
         }
 
 
         public static void AddCommand<T1, T2, T3, T4>(string command, string description, Action<T1, T2, T3, T4> method, string parameterName1, string parameterName2, string parameterName3, string parameterName4)
         {
-            AddCommand(command, description, method.Method, method.Target, new string[4] { parameterName1, parameterName2, parameterName3, parameterName4 });
+            AddCommand(command, description, method.Method, method.Target, new string[4] {parameterName1, parameterName2, parameterName3, parameterName4});
         }
 
 
         public static void AddCommand<T1, T2, T3, T4>(string command, string description, Func<T1, T2, T3, T4> method, string parameterName1, string parameterName2, string parameterName3)
         {
-            AddCommand(command, description, method.Method, method.Target, new string[3] { parameterName1, parameterName2, parameterName3 });
+            AddCommand(command, description, method.Method, method.Target, new string[3] {parameterName1, parameterName2, parameterName3});
         }
 
 
         public static void AddCommand<T1, T2, T3, T4, T5>(string command, string description, Func<T1, T2, T3, T4, T5> method, string parameterName1, string parameterName2, string parameterName3, string parameterName4)
         {
-            AddCommand(command, description, method.Method, method.Target, new string[4] { parameterName1, parameterName2, parameterName3, parameterName4 });
+            AddCommand(command, description, method.Method, method.Target, new string[4] {parameterName1, parameterName2, parameterName3, parameterName4});
         }
 
 
@@ -716,9 +716,9 @@ namespace IngameDebugConsole
             var methodSignature = new StringBuilder(256);
             var parameterSignatures = new string[parameterTypes.Length];
 
-#if USE_BOLD_COMMAND_SIGNATURES
+            #if USE_BOLD_COMMAND_SIGNATURES
             methodSignature.Append("<b>");
-#endif
+            #endif
             methodSignature.Append(command);
 
             if (parameterTypes.Length > 0)
@@ -740,9 +740,9 @@ namespace IngameDebugConsole
                 }
             }
 
-#if USE_BOLD_COMMAND_SIGNATURES
+            #if USE_BOLD_COMMAND_SIGNATURES
             methodSignature.Append("</b>");
-#endif
+            #endif
 
             if (!string.IsNullOrEmpty(description))
             {
@@ -1745,7 +1745,7 @@ namespace IngameDebugConsole
             var valuesToParse = new List<string>(2);
             FetchArgumentsFromCommand(input, valuesToParse);
 
-            var result = (IList)Activator.CreateInstance(arrayType, valuesToParse.Count);
+            var result = (IList) Activator.CreateInstance(arrayType, valuesToParse.Count);
             output = result;
 
             if (arrayType.IsArray)
@@ -1824,7 +1824,7 @@ namespace IngameDebugConsole
                     return false;
                 }
 
-                tokenValues[i] = (float)val;
+                tokenValues[i] = (float) val;
             }
 
             if (vectorType == typeof(Vector3))
@@ -1888,22 +1888,22 @@ namespace IngameDebugConsole
 
                 if (tokenValues.Length > 0)
                 {
-                    result.r = (byte)Mathf.RoundToInt(tokenValues[0]);
+                    result.r = (byte) Mathf.RoundToInt(tokenValues[0]);
                 }
 
                 if (tokenValues.Length > 1)
                 {
-                    result.g = (byte)Mathf.RoundToInt(tokenValues[1]);
+                    result.g = (byte) Mathf.RoundToInt(tokenValues[1]);
                 }
 
                 if (tokenValues.Length > 2)
                 {
-                    result.b = (byte)Mathf.RoundToInt(tokenValues[2]);
+                    result.b = (byte) Mathf.RoundToInt(tokenValues[2]);
                 }
 
                 if (tokenValues.Length > 3)
                 {
-                    result.a = (byte)Mathf.RoundToInt(tokenValues[3]);
+                    result.a = (byte) Mathf.RoundToInt(tokenValues[3]);
                 }
 
                 output = result;
@@ -1978,7 +1978,7 @@ namespace IngameDebugConsole
 
                 output = new Bounds(center, size);
             }
-#if UNITY_2017_2_OR_NEWER
+            #if UNITY_2017_2_OR_NEWER
             else if (vectorType == typeof(Vector3Int))
             {
                 var result = Vector3Int.zero;
@@ -2045,7 +2045,7 @@ namespace IngameDebugConsole
 
                 output = new BoundsInt(center, size);
             }
-#endif
+            #endif
             else
             {
                 output = null;
@@ -2057,7 +2057,7 @@ namespace IngameDebugConsole
         }
 
 
-#if UNITY_2017_2_OR_NEWER
+        #if UNITY_2017_2_OR_NEWER
         public static bool ParseVector2Int(string input, out object output)
         {
             return ParseVector(input, typeof(Vector2Int), out output);
@@ -2080,6 +2080,6 @@ namespace IngameDebugConsole
         {
             return ParseVector(input, typeof(BoundsInt), out output);
         }
-#endif
+        #endif
     }
 }

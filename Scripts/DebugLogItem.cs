@@ -15,7 +15,7 @@ namespace IngameDebugConsole
     {
         #region Platform Specific Elements
 
-#if !UNITY_2018_1_OR_NEWER
+        #if !UNITY_2018_1_OR_NEWER
 #if !UNITY_EDITOR && UNITY_ANDROID
 		private static AndroidJavaClass m_ajc = null;
 		private static AndroidJavaClass AJC
@@ -49,11 +49,11 @@ namespace IngameDebugConsole
 		[System.Runtime.InteropServices.DllImport( "__Internal" )]
 		private static extern void _DebugConsole_CopyText( string text );
 #endif
-#endif
+        #endif
 
         #endregion
 
-#pragma warning disable 0649
+        #pragma warning disable 0649
         // Cached components
         [SerializeField] private RectTransform transformComponent;
         public RectTransform Transform => transformComponent;
@@ -72,7 +72,7 @@ namespace IngameDebugConsole
         [SerializeField] private Text logCountText;
 
         [SerializeField] private RectTransform copyLogButton;
-#pragma warning restore 0649
+        #pragma warning restore 0649
 
         // Debug entry to show with this log item
         public DebugLogEntry Entry { get; private set; }
@@ -100,18 +100,18 @@ namespace IngameDebugConsole
             logTextOriginalSize = logText.rectTransform.sizeDelta;
             copyLogButtonHeight = copyLogButton.anchoredPosition.y + copyLogButton.sizeDelta.y + 2f; // 2f: space between text and button
 
-#if !UNITY_EDITOR && UNITY_WEBGL
+            #if !UNITY_EDITOR && UNITY_WEBGL
 			copyLogButton.gameObject.AddComponent<DebugLogItemCopyWebGL>().Initialize( this );
-#endif
+            #endif
         }
 
 
         public void SetContent(DebugLogEntry logEntry, DebugLogEntryTimestamp? logEntryTimestamp, int entryIndex, bool isExpanded)
         {
-            this.Entry = logEntry;
+            Entry = logEntry;
             this.logEntryTimestamp = logEntryTimestamp;
             Index = entryIndex;
-            this.Expanded = isExpanded;
+            Expanded = isExpanded;
 
             var size = transformComponent.sizeDelta;
 
@@ -213,7 +213,7 @@ namespace IngameDebugConsole
         // This log item is clicked, show the debug entry's stack trace
         public void OnPointerClick(PointerEventData eventData)
         {
-#if UNITY_EDITOR
+            #if UNITY_EDITOR
             if (eventData.button == PointerEventData.InputButton.Right)
             {
                 var regex = Regex.Match(Entry.stackTrace, @"\(at .*\.cs:[0-9]+\)$", RegexOptions.Multiline);
@@ -234,15 +234,15 @@ namespace IngameDebugConsole
             {
                 listView.OnLogItemClicked(this);
             }
-#else
+            #else
 			listView.OnLogItemClicked( this );
-#endif
+            #endif
         }
 
 
         public void CopyLog()
         {
-#if UNITY_EDITOR || !UNITY_WEBGL
+            #if UNITY_EDITOR || !UNITY_WEBGL
             var log = GetCopyContent();
 
             if (string.IsNullOrEmpty(log))
@@ -250,14 +250,14 @@ namespace IngameDebugConsole
                 return;
             }
 
-#if UNITY_EDITOR || UNITY_2018_1_OR_NEWER || ( !UNITY_ANDROID && !UNITY_IOS )
+            #if UNITY_EDITOR || UNITY_2018_1_OR_NEWER || ( !UNITY_ANDROID && !UNITY_IOS )
             GUIUtility.systemCopyBuffer = log;
-#elif UNITY_ANDROID
+            #elif UNITY_ANDROID
 			AJC.CallStatic( "CopyText", Context, log );
-#elif UNITY_IOS
+            #elif UNITY_IOS
 			_DebugConsole_CopyText( log );
-#endif
-#endif
+            #endif
+            #endif
         }
 
 

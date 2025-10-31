@@ -54,7 +54,7 @@ namespace IngameDebugConsole
             this.manager = manager;
             this.entriesToShow = entriesToShow;
             this.timestampsOfEntriesToShow = timestampsOfEntriesToShow;
-            this.ItemHeight = logItemHeight;
+            ItemHeight = logItemHeight;
 
             shouldRemoveLogItemPredicate = ShouldRemoveLogItem;
             poolLogItemAction = manager.PoolLogItem;
@@ -350,8 +350,8 @@ namespace IngameDebugConsole
                     }
                 }
 
-                var newBottomIndex = Mathf.Min((int)(contentPosBottom / ItemHeight), entriesToShow.Count - 1);
-                var newTopIndex = Mathf.Clamp((int)(contentPosTop / ItemHeight), 0, newBottomIndex);
+                var newBottomIndex = Mathf.Min((int) (contentPosBottom / ItemHeight), entriesToShow.Count - 1);
+                var newTopIndex = Mathf.Clamp((int) (contentPosTop / ItemHeight), 0, newBottomIndex);
 
                 if (currentTopIndex == -1)
                 {
@@ -508,7 +508,7 @@ namespace IngameDebugConsole
                 logItem.Image.color = logItemNormalColor2;
             }
         }
-#pragma warning disable 0649
+        #pragma warning disable 0649
         // Cached components
         [SerializeField] private RectTransform transformComponent;
         [SerializeField] private RectTransform viewportTransform;
@@ -516,6 +516,6 @@ namespace IngameDebugConsole
         [SerializeField] private Color logItemNormalColor1;
         [SerializeField] private Color logItemNormalColor2;
         [SerializeField] private Color logItemSelectedColor;
-#pragma warning restore 0649
+        #pragma warning restore 0649
     }
 }

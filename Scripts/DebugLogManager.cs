@@ -82,16 +82,16 @@ namespace IngameDebugConsole
         private bool startMinimized;
 
 
-#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+        #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
         [SerializeField]
         //[HideInInspector]
         //public InputAction toggleBinding = new InputAction( "Toggle Binding", type: InputActionType.Button, binding: "<Keyboard>/backquote", expectedControlType: "Button" );
         public List<InputActionReference> toggleBindings;
-#else
+        #else
 		[SerializeField]
 		[HideInInspector]
 		private KeyCode toggleKey = KeyCode.BackQuote;
-#endif
+        #endif
 
         [SerializeField] [HideInInspector] [Tooltip("If enabled, the console window will have a searchbar")]
         private bool enableSearchbar = true;
@@ -131,16 +131,16 @@ namespace IngameDebugConsole
         [SerializeField] [HideInInspector] [Tooltip("If enabled, on Android platform, logcat entries of the application will also be logged to the console with the prefix \"LOGCAT: \". This may come in handy especially if you want to access the native logs of your Android plugins (like Admob)")]
         private bool receiveLogcatLogsInAndroid;
 
-#pragma warning disable 0414
-#if UNITY_2018_3_OR_NEWER // On older Unity versions, disabling CS0169 is problematic: "Cannot restore warning 'CS0169' because it was disabled globally"
-#pragma warning disable 0169
-#endif
+        #pragma warning disable 0414
+        #if UNITY_2018_3_OR_NEWER // On older Unity versions, disabling CS0169 is problematic: "Cannot restore warning 'CS0169' because it was disabled globally"
+        #pragma warning disable 0169
+        #endif
         [SerializeField] [HideInInspector] [Tooltip("Native logs will be filtered using these arguments. If left blank, all native logs of the application will be logged to the console. But if you want to e.g. see Admob's logs only, you can enter \"-s Ads\" (without quotes) here")]
         private string logcatArguments;
-#if UNITY_2018_3_OR_NEWER
-#pragma warning restore 0169
-#endif
-#pragma warning restore 0414
+        #if UNITY_2018_3_OR_NEWER
+        #pragma warning restore 0169
+        #endif
+        #pragma warning restore 0414
 
         [SerializeField] [HideInInspector] [Tooltip("If enabled, on Android and iOS devices with notch screens, the console window will be repositioned so that the cutout(s) don't obscure it")]
         private bool avoidScreenCutout = true;
@@ -151,10 +151,10 @@ namespace IngameDebugConsole
         [SerializeField] [Tooltip("If a log is longer than this limit, it will be truncated. This helps avoid reaching Unity's 65000 vertex limit for UI canvases")]
         private int maxLogLength = 10000;
 
-#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
+        #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
         [SerializeField] [HideInInspector] [Tooltip("If enabled, on standalone platforms, command input field will automatically be focused (start receiving keyboard input) after opening the console window")]
         private bool autoFocusOnCommandInputField = true;
-#endif
+        #endif
 
         [SerializeField] private bool m_startCollapsed = true;
 
@@ -226,7 +226,7 @@ namespace IngameDebugConsole
 
         // Recycled list view to handle the log items efficiently
         [SerializeField] private DebugLogRecycledListView recycledListView;
-#pragma warning restore 0649
+        #pragma warning restore 0649
 
         public bool IsLogWindowVisible { get; private set; } = true;
 
@@ -324,12 +324,12 @@ namespace IngameDebugConsole
         private TimeSpan localTimeUtcOffset;
 
         // Last recorded values of Time.realtimeSinceStartup and Time.frameCount on the main thread (because these Time properties can't be accessed from other threads)
-#if !IDG_OMIT_ELAPSED_TIME
+        #if !IDG_OMIT_ELAPSED_TIME
         private float lastElapsedSeconds;
-#endif
-#if !IDG_OMIT_FRAMECOUNT
+        #endif
+        #if !IDG_OMIT_FRAMECOUNT
         private int lastFrameCount;
-#endif
+        #endif
 
         private DebugLogEntryTimestamp dummyLogEntryTimestamp;
 
@@ -345,13 +345,13 @@ namespace IngameDebugConsole
         // Callbacks for log window show/hide events
         public Action OnLogWindowShown, OnLogWindowHidden;
 
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
         private bool isQuittingApplication;
-#endif
+        #endif
 
-#if !UNITY_EDITOR && UNITY_ANDROID
+        #if !UNITY_EDITOR && UNITY_ANDROID
 		private DebugLogLogcatListener logcatListener;
-#endif
+        #endif
 
 
         private void Awake()
@@ -367,17 +367,17 @@ namespace IngameDebugConsole
             logEntriesLock = new object();
             sharedStringBuilder = new StringBuilder(1024);
 
-            canvasTR = (RectTransform)transform;
-            logItemsScrollRectTR = (RectTransform)logItemsScrollRect.transform;
+            canvasTR = (RectTransform) transform;
+            logItemsScrollRectTR = (RectTransform) logItemsScrollRect.transform;
             logItemsScrollRectOriginalSize = logItemsScrollRectTR.sizeDelta;
 
             // Associate sprites with log types
             logSpriteRepresentations = new Sprite[5];
-            logSpriteRepresentations[(int)LogType.Log] = infoLog;
-            logSpriteRepresentations[(int)LogType.Warning] = warningLog;
-            logSpriteRepresentations[(int)LogType.Error] = errorLog;
-            logSpriteRepresentations[(int)LogType.Exception] = errorLog;
-            logSpriteRepresentations[(int)LogType.Assert] = errorLog;
+            logSpriteRepresentations[(int) LogType.Log] = infoLog;
+            logSpriteRepresentations[(int) LogType.Warning] = warningLog;
+            logSpriteRepresentations[(int) LogType.Error] = errorLog;
+            logSpriteRepresentations[(int) LogType.Exception] = errorLog;
+            logSpriteRepresentations[(int) LogType.Assert] = errorLog;
 
             // Initially, all log types are visible
             filterInfoButton.color = filterButtonsSelectedColor;
@@ -413,12 +413,12 @@ namespace IngameDebugConsole
 
             if (!resizeFromRight)
             {
-                var resizeButtonTR = (RectTransform)resizeButton.GetComponentInParent<DebugLogResizeListener>().transform;
+                var resizeButtonTR = (RectTransform) resizeButton.GetComponentInParent<DebugLogResizeListener>().transform;
                 resizeButtonTR.anchorMin = new Vector2(0f, resizeButtonTR.anchorMin.y);
                 resizeButtonTR.anchorMax = new Vector2(0f, resizeButtonTR.anchorMax.y);
                 resizeButtonTR.pivot = new Vector2(0f, resizeButtonTR.pivot.y);
 
-                ((RectTransform)commandInputField.transform).anchoredPosition += new Vector2(resizeButtonTR.sizeDelta.x, 0f);
+                ((RectTransform) commandInputField.transform).anchoredPosition += new Vector2(resizeButtonTR.sizeDelta.x, 0f);
             }
 
             if (enableSearchbar)
@@ -469,14 +469,14 @@ namespace IngameDebugConsole
                 Application.logMessageReceivedThreaded += ReceivedLog;
             }
 
-#if UNITY_EDITOR && UNITY_2018_1_OR_NEWER
+            #if UNITY_EDITOR && UNITY_2018_1_OR_NEWER
             // OnApplicationQuit isn't reliable on some Unity versions when Application.wantsToQuit is used; Application.quitting is the only reliable solution on those versions
             // https://issuetracker.unity3d.com/issues/onapplicationquit-method-is-called-before-application-dot-wantstoquit-event-is-raised
             Application.quitting -= OnApplicationQuitting;
             Application.quitting += OnApplicationQuitting;
-#endif
+            #endif
 
-#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+            #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
             foreach (var binding in toggleBindings)
             {
                 if (binding == null || binding.action == null)
@@ -502,7 +502,7 @@ namespace IngameDebugConsole
 
             // On new Input System, scroll sensitivity is much higher than legacy Input system
             logItemsScrollRect.scrollSensitivity *= 0.25f;
-#endif
+            #endif
         }
 
 
@@ -516,20 +516,20 @@ namespace IngameDebugConsole
 
             if (receiveLogcatLogsInAndroid)
             {
-#if !UNITY_EDITOR && UNITY_ANDROID
+                #if !UNITY_EDITOR && UNITY_ANDROID
 				if( logcatListener == null )
 					logcatListener = new DebugLogLogcatListener();
 
 				logcatListener.Start( logcatArguments );
-#endif
+                #endif
             }
 
-#if IDG_ENABLE_HELPER_COMMANDS || IDG_ENABLE_LOGS_SAVE_COMMAND
+            #if IDG_ENABLE_HELPER_COMMANDS || IDG_ENABLE_LOGS_SAVE_COMMAND
 			DebugLogConsole.AddCommand( "logs.save", "Saves logs to persistentDataPath", SaveLogsToFile );
 			DebugLogConsole.AddCommand<string>( "logs.save", "Saves logs to the specified file", SaveLogsToFile );
-#endif
+            #endif
 
-#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+            #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
 
             foreach (var binding in toggleBindings)
             {
@@ -543,7 +543,7 @@ namespace IngameDebugConsole
                 binding.action.Enable();
             }
 
-#endif
+            #endif
 
             //Debug.LogAssertion( "assert" );
             //Debug.LogError( "error" );
@@ -560,14 +560,14 @@ namespace IngameDebugConsole
                 Application.logMessageReceivedThreaded -= ReceivedLog;
             }
 
-#if !UNITY_EDITOR && UNITY_ANDROID
+            #if !UNITY_EDITOR && UNITY_ANDROID
 			if( logcatListener != null )
 				logcatListener.Stop();
-#endif
+            #endif
 
             DebugLogConsole.RemoveCommand("logs.save");
 
-#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+            #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
 
             foreach (var binding in toggleBindings)
             {
@@ -583,7 +583,7 @@ namespace IngameDebugConsole
                     binding.action.Disable();
                 }
             }
-#endif
+            #endif
         }
 
 
@@ -614,13 +614,13 @@ namespace IngameDebugConsole
                 Application.logMessageReceivedThreaded -= ReceivedLog;
             }
 
-#if UNITY_EDITOR && UNITY_2018_1_OR_NEWER
+            #if UNITY_EDITOR && UNITY_2018_1_OR_NEWER
             Application.quitting -= OnApplicationQuitting;
-#endif
+            #endif
         }
 
 
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
         private void OnValidate()
         {
             maxLogCount = Mathf.Max(2, maxLogCount);
@@ -638,15 +638,15 @@ namespace IngameDebugConsole
         }
 
 
-#if UNITY_2018_1_OR_NEWER
+        #if UNITY_2018_1_OR_NEWER
         private void OnApplicationQuitting()
-#else
+            #else
 		private void OnApplicationQuit()
-#endif
+            #endif
         {
             isQuittingApplication = true;
         }
-#endif
+        #endif
 
 
         // Window is resized, update the list
@@ -658,23 +658,23 @@ namespace IngameDebugConsole
 
         private void Update()
         {
-#if !IDG_OMIT_ELAPSED_TIME
+            #if !IDG_OMIT_ELAPSED_TIME
             lastElapsedSeconds = Time.realtimeSinceStartup;
-#endif
-#if !IDG_OMIT_FRAMECOUNT
+            #endif
+            #if !IDG_OMIT_FRAMECOUNT
             lastFrameCount = Time.frameCount;
-#endif
+            #endif
 
-#if !UNITY_EDITOR && UNITY_ANDROID
+            #if !UNITY_EDITOR && UNITY_ANDROID
 			if( logcatListener != null )
 			{
 				string log;
 				while( ( log = logcatListener.GetLog() ) != null )
 					ReceivedLog( "LOGCAT: " + log, string.Empty, LogType.Log );
 			}
-#endif
+            #endif
 
-#if !ENABLE_INPUT_SYSTEM || ENABLE_LEGACY_INPUT_MANAGER
+            #if !ENABLE_INPUT_SYSTEM || ENABLE_LEGACY_INPUT_MANAGER
 			// Toggling the console with toggleKey is handled in Update instead of LateUpdate because
 			// when we hide the console, we don't want the commandInputField to capture the toggleKey.
 			// InputField captures input in LateUpdate so deactivating it in Update ensures that
@@ -689,18 +689,18 @@ namespace IngameDebugConsole
 			// 			ShowLogWindow();
 			// 	}
 			// }
-#endif
+            #endif
         }
 
 
         private void LateUpdate()
         {
-#if UNITY_EDITOR
+            #if UNITY_EDITOR
             if (isQuittingApplication)
             {
                 return;
             }
-#endif
+            #endif
 
             var numberOfLogsToProcess = IsLogWindowVisible ? queuedLogEntries.Count : queuedLogEntries.Count - queuedLogLimit;
             ProcessQueuedLogs(numberOfLogsToProcess);
@@ -879,15 +879,15 @@ namespace IngameDebugConsole
 
                 if (commandInputField.isFocused && commandHistory.Count > 0)
                 {
-#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+                    #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
                     if (Keyboard.current != null)
-#endif
+                        #endif
                     {
-#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+                        #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
                         if (Keyboard.current[Key.UpArrow].wasPressedThisFrame)
-#else
+                            #else
 						if( Input.GetKeyDown( KeyCode.UpArrow ) )
-#endif
+                            #endif
                         {
                             if (commandHistoryIndex == -1)
                             {
@@ -902,11 +902,11 @@ namespace IngameDebugConsole
                             commandInputField.text = commandHistory[commandHistoryIndex];
                             commandInputField.caretPosition = commandInputField.text.Length;
                         }
-#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+                        #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
                         else if (Keyboard.current[Key.DownArrow].wasPressedThisFrame && commandHistoryIndex != -1)
-#else
+                            #else
 						else if( Input.GetKeyDown( KeyCode.DownArrow ) && commandHistoryIndex != -1 )
-#endif
+                            #endif
                         {
                             if (++commandHistoryIndex < commandHistory.Count)
                             {
@@ -934,9 +934,9 @@ namespace IngameDebugConsole
                     popupManager.UpdatePosition(true);
                 }
 
-#if UNITY_EDITOR || UNITY_ANDROID || UNITY_IOS
+                #if UNITY_EDITOR || UNITY_ANDROID || UNITY_IOS
                 CheckScreenCutout();
-#endif
+                #endif
 
                 screenDimensionsChanged = false;
             }
@@ -956,13 +956,13 @@ namespace IngameDebugConsole
             // (in case new entries were intercepted while log window was hidden)
             OnLogEntriesUpdated(true, true);
 
-#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
+            #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
             // Focus on the command input field on standalone platforms when the console is opened
             if (autoFocusOnCommandInputField)
             {
                 StartCoroutine(ActivateCommandInputFieldCoroutine());
             }
-#endif
+            #endif
 
             IsLogWindowVisible = true;
 
@@ -1064,12 +1064,12 @@ namespace IngameDebugConsole
         // A debug entry is received
         public void ReceivedLog(string logString, string stackTrace, LogType logType)
         {
-#if UNITY_EDITOR
+            #if UNITY_EDITOR
             if (isQuittingApplication)
             {
                 return;
             }
-#endif
+            #endif
 
             switch (logType)
             {
@@ -1154,15 +1154,15 @@ namespace IngameDebugConsole
             {
                 // It is 10 times faster to cache local time's offset from UtcNow and add it to UtcNow to get local time at any time
                 var dateTime = DateTime.UtcNow + localTimeUtcOffset;
-#if !IDG_OMIT_ELAPSED_TIME && !IDG_OMIT_FRAMECOUNT
+                #if !IDG_OMIT_ELAPSED_TIME && !IDG_OMIT_FRAMECOUNT
                 queuedLogEntryTimestamp = new DebugLogEntryTimestamp(dateTime, lastElapsedSeconds, lastFrameCount);
-#elif !IDG_OMIT_ELAPSED_TIME
+                #elif !IDG_OMIT_ELAPSED_TIME
 				queuedLogEntryTimestamp = new DebugLogEntryTimestamp( dateTime, lastElapsedSeconds );
-#elif !IDG_OMIT_FRAMECOUNT
+                #elif !IDG_OMIT_FRAMECOUNT
 				queuedLogEntryTimestamp = new DebugLogEntryTimestamp( dateTime, lastFrameCount );
-#else
+                #else
 				queuedLogEntryTimestamp = new DebugLogEntryTimestamp( dateTime );
-#endif
+                #endif
             }
             else
             {
@@ -1257,7 +1257,7 @@ namespace IngameDebugConsole
             {
                 // It is not a duplicate,
                 // add it to the list of unique debug entries
-                logEntry.logTypeSpriteRepresentation = logSpriteRepresentations[(int)logType];
+                logEntry.logTypeSpriteRepresentation = logSpriteRepresentations[(int) logType];
                 logEntry.collapsedIndex = collapsedLogEntries.Count;
 
                 collapsedLogEntries.Add(logEntry);
@@ -1809,7 +1809,7 @@ namespace IngameDebugConsole
             // To be able to maximize the log window easily:
             // - When enableHorizontalResizing is true and resizing horizontally, resize button will be grabbed from its left edge (if resizeFromRight is true) or its right edge
             // - While resizing vertically, resize button will be grabbed from its top edge
-            var resizeButtonRect = ((RectTransform)resizeButton.rectTransform.parent).rect;
+            var resizeButtonRect = ((RectTransform) resizeButton.rectTransform.parent).rect;
             var resizeButtonWidth = resizeButtonRect.width;
             var resizeButtonHeight = resizeButtonRect.height;
 
@@ -2013,7 +2013,7 @@ namespace IngameDebugConsole
                 return;
             }
 
-#if UNITY_2017_2_OR_NEWER && ( UNITY_EDITOR || UNITY_ANDROID || UNITY_IOS )
+            #if UNITY_2017_2_OR_NEWER && ( UNITY_EDITOR || UNITY_ANDROID || UNITY_IOS )
             // Check if there is a cutout at the top of the screen
             var screenHeight = Screen.height;
             var safeYMax = Screen.safeArea.yMax;
@@ -2032,11 +2032,11 @@ namespace IngameDebugConsole
                 logWindowTR.anchoredPosition = Vector2.zero;
                 logWindowTR.sizeDelta = Vector2.zero;
             }
-#endif
+            #endif
         }
 
 
-#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
+        #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
         private IEnumerator ActivateCommandInputFieldCoroutine()
         {
             // Waiting 1 frame before activating commandInputField ensures that the toggleKey isn't captured by it
@@ -2046,7 +2046,7 @@ namespace IngameDebugConsole
             yield return null;
             commandInputField.MoveTextEnd(false);
         }
-#endif
+        #endif
 
 
         // Pool an unused log item
