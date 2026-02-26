@@ -4,6 +4,11 @@ using UnityEngine;
 
 namespace IngameDebugConsole
 {
+    /// <summary>
+    ///     Custom Inspector for <see cref="DebugLogManager" /> that groups related settings into labelled
+    ///     sections and exposes conditional sub-properties (e.g. resize options, logcat arguments,
+    ///     timestamp settings) only when their parent toggle is enabled.
+    /// </summary>
     [CustomEditor(typeof(DebugLogManager))]
     public class DebugLogManagerEditor : Editor
     {
