@@ -4,23 +4,34 @@ using UnityEngine;
 
 namespace IngameDebugConsole
 {
+    /// <summary>
+    /// A fixed-capacity generic ring buffer. When the buffer is full, adding a new element silently overwrites the oldest one.
+    /// </summary>
     public class CircularBuffer<T>
     {
         private readonly T[] array;
         private int startIndex;
 
 
+        /// <summary>Creates a fixed-capacity ring buffer with the given size.</summary>
         public CircularBuffer(int capacity)
         {
             array = new T[capacity];
         }
 
 
+        /// <summary>
+        /// Number of elements currently stored in the buffer (never exceeds its fixed capacity).
+        /// </summary>
         public int Count { get; private set; }
+        /// <summary>
+        /// Returns the element at the given logical index (0 is the oldest element).
+        /// </summary>
         public T this[int index] => array[(startIndex + index) % array.Length];
 
 
         // Old elements are overwritten when capacity is reached
+        /// <summary>Adds a value to the buffer, overwriting the oldest element when capacity is full.</summary>
         public void Add(T value)
         {
             if (Count < array.Length)
@@ -40,21 +51,35 @@ namespace IngameDebugConsole
     }
 
 
+    /// <summary>
+    /// A generic ring buffer that grows its internal array automatically when the element count exceeds capacity.
+    /// </summary>
     public class DynamicCircularBuffer<T>
     {
         private T[] array;
         private int startIndex;
 
 
+        /// <summary>Creates a dynamic ring buffer with the specified initial backing-array size.</summary>
         public DynamicCircularBuffer(int initialCapacity = 2)
         {
             array = new T[initialCapacity];
         }
 
 
+        /// <summary>
+        /// Number of elements currently stored in the buffer.
+        /// </summary>
         public int Count { get; private set; }
+
+        /// <summary>
+        /// Current size of the internal backing array.
+        /// </summary>
         public int Capacity => array.Length;
 
+        /// <summary>
+        /// Gets or sets the element at the given logical index (0 is the oldest element).
+        /// </summary>
         public T this[int index]
         {
             get => array[(startIndex + index) % array.Length];
@@ -108,6 +133,7 @@ namespace IngameDebugConsole
         }
 
 
+        /// <summary>Appends all elements from <paramref name="other"/> to the end of this buffer, growing if necessary.</summary>
         public void AddRange(DynamicCircularBuffer<T> other)
         {
             if (other.Count == 0)
@@ -146,6 +172,7 @@ namespace IngameDebugConsole
         }
 
 
+        /// <summary>Removes and returns the first element, advancing the start index.</summary>
         public T RemoveFirst()
         {
             var element = array[startIndex];
@@ -162,6 +189,7 @@ namespace IngameDebugConsole
         }
 
 
+        /// <summary>Removes and returns the last element.</summary>
         public T RemoveLast()
         {
             var index = (startIndex + Count - 1) % array.Length;
@@ -174,12 +202,16 @@ namespace IngameDebugConsole
         }
 
 
+        /// <summary>Removes all elements that satisfy <paramref name="shouldRemoveElement"/>, compacting the buffer in place.</summary>
         public int RemoveAll(Predicate<T> shouldRemoveElement)
         {
             return RemoveAll<T>(shouldRemoveElement, null, null);
         }
 
 
+        /// <summary>
+        /// Removes all matching elements while optionally notifying their new indices and keeping a second buffer in sync.
+        /// </summary>
         public int RemoveAll<Y>(Predicate<T> shouldRemoveElement, Action<T, int> onElementIndexChanged, DynamicCircularBuffer<Y> synchronizedBuffer)
         {
             var synchronizedArray = synchronizedBuffer != null ? synchronizedBuffer.array : null;
@@ -292,6 +324,7 @@ namespace IngameDebugConsole
         }
 
 
+        /// <summary>Removes the first <paramref name="trimCount"/> elements, invoking an optional per-element callback before each removal.</summary>
         public void TrimStart(int trimCount, Action<T> perElementCallback = null)
         {
             TrimInternal(trimCount, startIndex, perElementCallback);
@@ -299,6 +332,7 @@ namespace IngameDebugConsole
         }
 
 
+        /// <summary>Removes the last <paramref name="trimCount"/> elements, invoking an optional per-element callback before each removal.</summary>
         public void TrimEnd(int trimCount, Action<T> perElementCallback = null)
         {
             TrimInternal(trimCount, (startIndex + Count - trimCount) % array.Length, perElementCallback);
@@ -337,6 +371,9 @@ namespace IngameDebugConsole
         }
 
 
+        /// <summary>
+        /// Removes all elements from the buffer.
+        /// </summary>
         public void Clear()
         {
             var elementsBeforeWrap = Mathf.Min(Count, array.Length - startIndex);
@@ -352,6 +389,9 @@ namespace IngameDebugConsole
         }
 
 
+        /// <summary>
+        /// Returns the logical index of the first occurrence of <paramref name="value"/>, or -1 if not found.
+        /// </summary>
         public int IndexOf(T value)
         {
             var elementsBeforeWrap = Mathf.Min(Count, array.Length - startIndex);
@@ -376,6 +416,9 @@ namespace IngameDebugConsole
         }
 
 
+        /// <summary>
+        /// Invokes <paramref name="action"/> once for each element in the buffer, in logical order.
+        /// </summary>
         public void ForEach(Action<T> action)
         {
             var elementsBeforeWrap = Mathf.Min(Count, array.Length - startIndex);

@@ -3,6 +3,11 @@ using UnityEngine;
 
 namespace IngameDebugConsole.Commands
 {
+	/// <summary>
+	/// Built-in console commands for reading and writing <see cref="UnityEngine.PlayerPrefs"/> values at runtime.
+	/// Only compiled when the <c>IDG_ENABLE_HELPER_COMMANDS</c> scripting define is present.
+	/// Commands: <c>prefs.int</c>, <c>prefs.float</c>, <c>prefs.string</c>, <c>prefs.delete</c>, <c>prefs.clear</c>.
+	/// </summary>
 	public class PlayerPrefsCommands
 	{
 		[ConsoleMethod( "prefs.int", "Returns the value of an Integer PlayerPrefs field" ), UnityEngine.Scripting.Preserve]

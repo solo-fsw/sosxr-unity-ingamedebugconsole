@@ -10,6 +10,11 @@ namespace IngameDebugConsole
 {
     // Avoid multiple EventSystems in the scene by activating the embedded EventSystem only if one doesn't already exist in the scene
     [DefaultExecutionOrder(1000)]
+    /// <summary>
+    /// Activates the embedded <see cref="UnityEngine.EventSystems.EventSystem"/> only when no other EventSystem exists in the scene,
+    /// preventing "Multiple EventSystems in scene" warnings.
+    /// Deactivates it on scene transitions to let the incoming scene manage its own EventSystem.
+    /// </summary>
     public class EventSystemHandler : MonoBehaviour
     {
         #pragma warning disable 0649

@@ -7,6 +7,10 @@ using UnityEngine.UI;
 // recycled within the list instead of creating a new log item at each chance
 namespace IngameDebugConsole
 {
+    /// <summary>
+    /// Virtualised scroll list that recycles a small pool of <see cref="DebugLogItem"/> rows to display any number of log entries.
+    /// Only visible rows are instantiated; items are pooled and reused as the user scrolls.
+    /// </summary>
     public class DebugLogRecycledListView : MonoBehaviour
     {
         // Log items used to visualize the visible debug entries
@@ -30,8 +34,10 @@ namespace IngameDebugConsole
         private Action<DebugLogItem> poolLogItemAction;
         private float DeltaHeightOfSelectedLogEntry => SelectedItemHeight - ItemHeight;
 
+        /// <summary>Height in pixels of a normal (collapsed) log item row.</summary>
         public float ItemHeight { get; private set; }
 
+        /// <summary>Height in pixels of the currently selected (expanded) log item row.</summary>
         public float SelectedItemHeight { get; private set; }
 
 
@@ -49,6 +55,7 @@ namespace IngameDebugConsole
         }
 
 
+        /// <summary>Binds this view to the owning manager and initialises row sizing from the prefab.</summary>
         public void Initialize(DebugLogManager manager, DynamicCircularBuffer<DebugLogEntry> entriesToShow, DynamicCircularBuffer<DebugLogEntryTimestamp> timestampsOfEntriesToShow, float logItemHeight)
         {
             this.manager = manager;
@@ -61,6 +68,7 @@ namespace IngameDebugConsole
         }
 
 
+        /// <summary>Switches between collapsed mode (unique entries only) and uncollapsed mode (all entries).</summary>
         public void SetCollapseMode(bool collapse)
         {
             isCollapseOn = collapse;
@@ -68,6 +76,7 @@ namespace IngameDebugConsole
 
 
         // A log item is clicked, highlight it
+        /// <summary>Expands the clicked item and collapses the previously selected one.</summary>
         public void OnLogItemClicked(DebugLogItem item)
         {
             OnLogItemClickedInternal(item.Index, item);
@@ -75,6 +84,7 @@ namespace IngameDebugConsole
 
 
         // Force expand the log item at specified index
+        /// <summary>Programmatically selects the entry at <paramref name="itemIndex"/> and scrolls it into view.</summary>
         public void SelectAndFocusOnLogItemAtIndex(int itemIndex)
         {
             if (indexOfSelectedLogEntry != itemIndex) // Make sure that we aren't deselecting the target log item
@@ -122,6 +132,7 @@ namespace IngameDebugConsole
 
 
         // Deselect the currently selected log item
+        /// <summary>Clears the current selection and resets the expanded row height to zero.</summary>
         public void DeselectSelectedLogItem()
         {
             selectedLogEntry = null;
@@ -131,6 +142,7 @@ namespace IngameDebugConsole
 
 
         // Number of debug entries may have changed, update the list
+        /// <summary>Recalculates content height and refreshes visible items after the entry list has changed.</summary>
         public void OnLogEntriesUpdated(bool updateAllVisibleItemContents)
         {
             CalculateContentHeight();
@@ -139,6 +151,7 @@ namespace IngameDebugConsole
 
 
         // A single collapsed log entry at specified index is updated, refresh its item if visible
+        /// <summary>Updates the visible row for a collapsed entry whose count has changed at the given index.</summary>
         public void OnCollapsedLogEntryAtIndexUpdated(int index)
         {
             if (index >= currentTopIndex && index <= currentBottomIndex)
@@ -154,6 +167,7 @@ namespace IngameDebugConsole
         }
 
 
+        /// <summary>Refreshes the count badge on every currently visible collapsed item.</summary>
         public void RefreshCollapsedLogEntryCounts()
         {
             for (var i = 0; i < visibleLogItems.Count; i++)
@@ -163,6 +177,7 @@ namespace IngameDebugConsole
         }
 
 
+        /// <summary>Handles removal of the oldest <paramref name="removedLogCount"/> entries, adjusting selection, pooling, and scroll position.</summary>
         public void OnLogEntriesRemoved(int removedLogCount)
         {
             if (selectedLogEntry != null)
@@ -271,6 +286,7 @@ namespace IngameDebugConsole
 
 
         // Log window's width has changed, update the expanded (currently selected) log's height
+        /// <summary>Recalculates the expanded item's height and re-renders all visible rows after the viewport width changes.</summary>
         public void OnViewportWidthChanged()
         {
             if (indexOfSelectedLogEntry >= entriesToShow.Count)
@@ -287,6 +303,7 @@ namespace IngameDebugConsole
 
 
         // Log window's height has changed, update the list
+        /// <summary>Re-renders the visible list after the viewport height changes.</summary>
         public void OnViewportHeightChanged()
         {
             UpdateItemsInTheList(false);

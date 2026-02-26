@@ -206,6 +206,7 @@ namespace IngameDebugConsole
 
         // CompareInfo used for case-insensitive command name comparison
         internal static readonly CompareInfo caseInsensitiveComparer = new CultureInfo("en-US").CompareInfo;
+        /// <summary>Event raised after every successfully executed command. Subscribe to react to in-game console commands at runtime.</summary>
         public static event CommandExecutedDelegate OnCommandExecuted;
 
 
@@ -770,6 +771,7 @@ namespace IngameDebugConsole
 
 
         // Remove all commands with the matching method from the console
+        /// <summary>Removes all commands associated with the given delegate's underlying method. Overloads exist for Action/Func variants.</summary>
         public static void RemoveCommand(Action method)
         {
             RemoveCommand(method.Method);

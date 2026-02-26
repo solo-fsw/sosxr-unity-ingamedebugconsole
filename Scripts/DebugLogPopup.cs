@@ -10,6 +10,10 @@ using Screen = UnityEngine.Device.Screen; // To support Device Simulator on Unit
 // Manager class for the debug popup
 namespace IngameDebugConsole
 {
+    /// <summary>
+    /// Floating popup that shows info/warning/error counts while the main console window is hidden.
+    /// It can be dragged around the screen and clicked to re-open the console window.
+    /// </summary>
     public class DebugLogPopup : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         private RectTransform popupTransform;
@@ -34,9 +38,11 @@ namespace IngameDebugConsole
         // Coroutines for simple code-based animations
         private IEnumerator moveToPosCoroutine;
 
+        /// <summary>True while the popup canvas group is visible and accepting raycasts.</summary>
         public bool IsVisible { get; private set; }
 
 
+        /// <summary>Cancels any active snap animation when the user starts dragging the popup.</summary>
         public void OnBeginDrag(PointerEventData data)
         {
             isPopupBeingDragged = true;
@@ -51,6 +57,7 @@ namespace IngameDebugConsole
 
 
         // Reposition the popup
+        /// <summary>Repositions the popup to follow the pointer during a drag.</summary>
         public void OnDrag(PointerEventData data)
         {
             Vector2 localPoint;
@@ -63,6 +70,7 @@ namespace IngameDebugConsole
 
 
         // Smoothly translate the popup to the nearest edge
+        /// <summary>Smoothly snaps the popup to the nearest safe-area edge after a drag ends.</summary>
         public void OnEndDrag(PointerEventData data)
         {
             isPopupBeingDragged = false;
@@ -71,6 +79,7 @@ namespace IngameDebugConsole
 
 
         // Popup is clicked
+        /// <summary>Re-opens the main console window when the popup is tapped (and not being dragged).</summary>
         public void OnPointerClick(PointerEventData data)
         {
             // Hide the popup and show the log window
@@ -104,6 +113,7 @@ namespace IngameDebugConsole
         }
 
 
+        /// <summary>Increments the displayed log-type counters and tints the background to reflect the most-severe new log type.</summary>
         public void NewLogsArrived(int newInfo, int newWarning, int newError)
         {
             if (newInfo > 0)
@@ -170,6 +180,7 @@ namespace IngameDebugConsole
 
 
         // Hides the log window and shows the popup
+        /// <summary>Makes the popup visible and resets all log-type counters to zero.</summary>
         public void Show()
         {
             canvasGroup.blocksRaycasts = true;
@@ -185,6 +196,7 @@ namespace IngameDebugConsole
 
 
         // Hide the popup
+        /// <summary>Hides the popup and cancels raycasting.</summary>
         public void Hide()
         {
             canvasGroup.blocksRaycasts = false;
@@ -199,6 +211,10 @@ namespace IngameDebugConsole
         // RectTransform space: raw anchoredPosition of the popup that's in range [-canvasSize/2, canvasSize/2]
         // Safe area space: Screen.safeArea space that's in range [safeAreaBottomLeft, safeAreaTopRight] where these corner positions
         //                  are all positive (calculated from bottom left corner of the screen instead of the center of the screen)
+        /// <summary>
+        /// Repositions the popup to the nearest screen-safe-area edge.
+        /// Pass <c>immediately = true</c> to teleport; <c>false</c> for a smooth animation.
+        /// </summary>
         public void UpdatePosition(bool immediately)
         {
             var canvasRawSize = debugManager.canvasTR.rect.size;
