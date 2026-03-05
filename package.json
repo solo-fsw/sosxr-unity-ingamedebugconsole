@@ -14,7 +14,7 @@
   "samples": [
     {
       "displayName": "Samples",
-      "description": "Contains enhanced logger samples",
+      "description": "Contains In-Game Debug Console samples",
       "path": "Samples~/Samples"
     }
   ],
