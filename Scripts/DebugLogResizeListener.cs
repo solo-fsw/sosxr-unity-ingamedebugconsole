@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 // Listens to drag event on the DebugLogManager's resize button
 namespace IngameDebugConsole
 {
+    /// <summary>Forwards drag events from the console's resize handle to <see cref="DebugLogManager.Resize"/>.</summary>
     public class DebugLogResizeListener : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         #pragma warning disable 0649

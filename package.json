@@ -1,8 +1,9 @@
 {
   "name": "com.yasirkula.ingamedebugconsole",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "displayName": "In-game Debug Console",
   "description": "This asset helps you see debug messages (logs, warnings, errors, exceptions) runtime in a build (also assertions in editor) and execute commands using its built-in console. It also supports logging logcat messages to the console on Android platform.",
+  "documentationUrl": "https://github.com/solo-fsw/sosxr-unity-ingamedebugconsole",
   "unity": "2021.3",
   "dependencies": {
     "com.unity.modules.androidjni": "1.0.0"
@@ -12,8 +13,8 @@
   ],
   "samples": [
     {
-      "displayName": "Samples",
-      "description": "Contains enhanced logger samples",
+      "displayName": "Default samples",
+      "description": "Contains In-Game Debug Console samples",
       "path": "Samples~/Samples"
     }
   ],

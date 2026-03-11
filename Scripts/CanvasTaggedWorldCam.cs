@@ -3,9 +3,16 @@ using UnityEngine;
 
 namespace SOSXR.IngameDebugConsole
 {
+    /// <summary>
+    /// Finds a <see cref="Camera"/> by tag at startup and assigns it as the world-space camera of the attached Canvas.
+    /// Disables itself once a camera is found.
+    /// </summary>
     [RequireComponent(typeof(Canvas))]
     public class CanvasTaggedWorldCam : MonoBehaviour
     {
+        /// <summary>
+        /// Tag of the GameObject that contains the target <see cref="Camera"/>.
+        /// </summary>
         [SerializeField] private string m_camTag = "MainCamera";
         private Canvas _canvas;
 
@@ -42,9 +49,16 @@ namespace SOSXR.IngameDebugConsole
     }
 
 
+    /// <summary>
+    /// Finds a <see cref="Camera"/> by tag at startup and assigns it as the screen-space camera of the attached Canvas.
+    /// Disables itself once a camera is found.
+    /// </summary>
     [RequireComponent(typeof(Canvas))]
     public class CanvasTaggedScreenSpaceCam : MonoBehaviour
     {
+        /// <summary>
+        /// Tag of the GameObject that contains the target <see cref="Camera"/>.
+        /// </summary>
         [SerializeField] private string m_camTag = "MainCamera";
         private Canvas _canvas;
 

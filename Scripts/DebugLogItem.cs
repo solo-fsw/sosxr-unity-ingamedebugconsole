@@ -11,6 +11,10 @@ using System.Text.RegularExpressions;
 // A UI element to show information about a debug entry
 namespace IngameDebugConsole
 {
+    /// <summary>
+    /// A reusable uGUI row that visualises a single <see cref="DebugLogEntry"/> in the scrollable log list.
+    /// Instances are pooled by <see cref="DebugLogManager"/> and recycled as the user scrolls.
+    /// </summary>
     public class DebugLogItem : MonoBehaviour, IPointerClickHandler
     {
         #region Platform Specific Elements
@@ -81,8 +85,10 @@ namespace IngameDebugConsole
         public DebugLogEntryTimestamp? Timestamp => logEntryTimestamp;
 
         // Index of the entry in the list of entries
+        /// <summary>Index of the displayed entry within the currently-filtered log list.</summary>
         [NonSerialized] public int Index;
 
+        /// <summary>True when this item is currently selected and rendering the full stack trace with the copy button.</summary>
         public bool Expanded { get; private set; }
 
         private Vector2 logTextOriginalPosition;
@@ -92,6 +98,7 @@ namespace IngameDebugConsole
         private DebugLogRecycledListView listView;
 
 
+        /// <summary>Caches internal layout measurements and attaches the WebGL copy component when running on WebGL.</summary>
         public void Initialize(DebugLogRecycledListView listView)
         {
             this.listView = listView;
@@ -106,6 +113,7 @@ namespace IngameDebugConsole
         }
 
 
+        /// <summary>Assigns a log entry and refreshes all visual state (text, icon, size, copy button visibility).</summary>
         public void SetContent(DebugLogEntry logEntry, DebugLogEntryTimestamp? logEntryTimestamp, int entryIndex, bool isExpanded)
         {
             Entry = logEntry;
@@ -150,6 +158,7 @@ namespace IngameDebugConsole
 
 
         // Show the collapsed count of the debug entry
+        /// <summary>Shows and updates the collapse-count badge for this item's entry.</summary>
         public void ShowCount()
         {
             logCountText.text = Entry.count.ToString();
@@ -162,6 +171,7 @@ namespace IngameDebugConsole
 
 
         // Hide the collapsed count of the debug entry
+        /// <summary>Hides the collapse-count badge.</summary>
         public void HideCount()
         {
             if (logCountParent.activeSelf)
@@ -172,6 +182,7 @@ namespace IngameDebugConsole
 
 
         // Update the debug entry's displayed timestamp
+        /// <summary>Refreshes the displayed timestamp; only redraws text if the item is expanded or <c>alwaysDisplayTimestamps</c> is on.</summary>
         public void UpdateTimestamp(DebugLogEntryTimestamp timestamp)
         {
             logEntryTimestamp = timestamp;
@@ -211,6 +222,7 @@ namespace IngameDebugConsole
 
 
         // This log item is clicked, show the debug entry's stack trace
+        /// <summary>Handles pointer clicks: expands/collapses the item normally; on right-click in the Editor, opens the source file at the relevant line.</summary>
         public void OnPointerClick(PointerEventData eventData)
         {
             #if UNITY_EDITOR
@@ -240,6 +252,7 @@ namespace IngameDebugConsole
         }
 
 
+        /// <summary>Copies the full log content (with timestamp if available) to the system clipboard.</summary>
         public void CopyLog()
         {
             #if UNITY_EDITOR || !UNITY_WEBGL
@@ -278,6 +291,7 @@ namespace IngameDebugConsole
         }
 
 
+        /// <summary>Measures the pixel height this item would require when expanded, without permanently changing the layout.</summary>
         public float CalculateExpandedHeight(DebugLogEntry logEntry, DebugLogEntryTimestamp? logEntryTimestamp)
         {
             var text = logText.text;

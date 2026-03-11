@@ -13,6 +13,11 @@ namespace IngameDebugConsole
     #if UNITY_2022_1_OR_NEWER && UNITY_EDITOR
     [DefaultExecutionOrder(-50)]
     #endif
+    /// <summary>
+    /// Editor-only workaround for a Unity 2022.1+ issue where <c>InputField.OnValidate</c> triggers
+    /// <c>Canvas.ForceUpdateCanvases</c> and floods the console with layout-rebuild warnings.
+    /// Temporarily disables the internal <c>m_PreventFontCallback</c> flag via reflection before the call.
+    /// </summary>
     public class InputFieldWarningsFixer : MonoBehaviour
     {
         #if UNITY_2022_1_OR_NEWER && UNITY_EDITOR

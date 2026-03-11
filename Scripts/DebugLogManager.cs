@@ -29,6 +29,7 @@ using Screen = UnityEngine.Device.Screen; // To support Device Simulator on Unit
 // An enum to represent filtered log types
 namespace IngameDebugConsole
 {
+    /// <summary>Bitmask controlling which log types are displayed in the console window.</summary>
     public enum DebugLogFilter
     {
         None = 0,
@@ -39,6 +40,7 @@ namespace IngameDebugConsole
     }
 
 
+    /// <summary>Controls when the minimised floating popup is shown after the console window is closed.</summary>
     public enum PopupVisibility
     {
         Always = 0,
@@ -47,6 +49,10 @@ namespace IngameDebugConsole
     }
 
 
+    /// <summary>
+    /// Central <see cref="MonoBehaviour"/> that intercepts all Unity log messages, manages the console window lifecycle,
+    /// drives the <see cref="DebugLogRecycledListView"/>, and routes console command input to <see cref="DebugLogConsole"/>.
+    /// </summary>
     public class DebugLogManager : MonoBehaviour
     {
         //#pragma warning disable 0649
@@ -228,8 +234,10 @@ namespace IngameDebugConsole
         [SerializeField] private DebugLogRecycledListView recycledListView;
         #pragma warning restore 0649
 
+        /// <summary>True while the log window canvas group is fully opaque and accepts raycasts.</summary>
         public bool IsLogWindowVisible { get; private set; } = true;
 
+        /// <summary>Enables or disables the minimised popup <see cref="GameObject"/>.</summary>
         public bool PopupEnabled
         {
             get => popupManager.gameObject.activeSelf;
@@ -257,6 +265,10 @@ namespace IngameDebugConsole
 
         // If the last log item is completely visible (scrollbar is at the bottom),
         // scrollbar will remain at the bottom when new debug entries are received
+        /// <summary>
+        /// When <c>true</c>, the scroll view auto-scrolls to the newest log entry.
+        /// Set to <c>false</c> by scroll/drag listeners when the user manually scrolls up.
+        /// </summary>
         [NonSerialized] public bool SnapToBottom = true;
 
         // List of unique debug entries (duplicates of entries are not kept)
@@ -343,6 +355,7 @@ namespace IngameDebugConsole
         private Action<DebugLogEntry, int> updateLogEntryCollapsedIndexAction;
 
         // Callbacks for log window show/hide events
+        /// <summary>Callbacks fired when the console window becomes visible or hidden respectively.</summary>
         public Action OnLogWindowShown, OnLogWindowHidden;
 
         #if UNITY_EDITOR
@@ -943,6 +956,7 @@ namespace IngameDebugConsole
         }
 
 
+        /// <summary>Makes the console window visible, hides the popup, and refreshes the log list.</summary>
         public void ShowLogWindow()
         {
             // Debug.Log("ShowLogWindow");
@@ -973,6 +987,7 @@ namespace IngameDebugConsole
         }
 
 
+        /// <summary>Hides the console window and shows the popup if the visibility policy requires it.</summary>
         public void HideLogWindow()
         {
             // Debug.Log("HideLogWindow");
@@ -1062,6 +1077,10 @@ namespace IngameDebugConsole
 
 
         // A debug entry is received
+        /// <summary>
+        /// Thread-safe log receiver connected to <see cref="Application.logMessageReceivedThreaded"/>.
+        /// Enqueues incoming log entries for processing on the main thread.
+        /// </summary>
         public void ReceivedLog(string logString, string stackTrace, LogType logType)
         {
             #if UNITY_EDITOR
@@ -1494,6 +1513,7 @@ namespace IngameDebugConsole
 
 
         // Modifies certain properties of the most recently received log
+        /// <summary>Modifies the most recently enqueued log entry: optionally marks it for auto-expansion and/or strips its stack trace.</summary>
         public static void AdjustLatestPendingLog(bool autoExpand, bool stripStackTrace)
         {
             lock (logEntriesLock)
@@ -1518,6 +1538,7 @@ namespace IngameDebugConsole
 
 
         // Clear all the logs
+        /// <summary>Clears all log entries, resets type counters, and returns all pooled entries.</summary>
         public void ClearLogs()
         {
             SnapToBottom = true;
@@ -1951,6 +1972,7 @@ namespace IngameDebugConsole
         }
 
 
+        /// <summary>Returns all log entries concatenated into a single formatted string, including timestamps when capture is enabled.</summary>
         public string GetAllLogs()
         {
             // Process all pending logs since we want to return "all" logs
@@ -1992,12 +2014,14 @@ namespace IngameDebugConsole
         }
 
 
+        /// <summary>Saves all logs to a timestamped <c>.txt</c> file in <see cref="Application.persistentDataPath"/>.</summary>
         public void SaveLogsToFile()
         {
             SaveLogsToFile(Path.Combine(Application.persistentDataPath, DateTime.Now.ToString("dd-MM-yyyy--HH-mm-ss") + ".txt"));
         }
 
 
+        /// <summary>Saves all logs to the specified file path.</summary>
         public void SaveLogsToFile(string filePath)
         {
             File.WriteAllText(filePath, GetAllLogs());
