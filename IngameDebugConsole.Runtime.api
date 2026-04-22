@@ -1,0 +1,326 @@
+// This file is generated. Do not modify by hand.
+// XML documentation file not found. To check if public methods have XML comments,
+// make sure the XML doc file is present and located next to the scraped dll
+public class CreateDemoLogs : UnityEngine.MonoBehaviour
+{
+    public string IdentifyerText;
+    public CreateDemoLogs() {}
+}
+
+namespace IngameDebugConsole
+{
+    public class CircularBuffer<T>
+    {
+        public int Count { get; }
+        public T this[int index] { get; }
+        public CircularBuffer(int capacity) {}
+        public void Add(T value);
+    }
+
+    [System.AttributeUsage(System.AttributeTargets.Method, AllowMultiple = true, Inherited = false)] public class ConsoleMethodAttribute : System.Attribute
+    {
+        public string Command { get; }
+        public string Description { get; }
+        public string[] ParameterNames { get; }
+        public ConsoleMethodAttribute(string command, string description, params string[] parameterNames) {}
+    }
+
+    public class ConsoleMethodInfo
+    {
+        public readonly string command;
+        public readonly object instance;
+        public readonly System.Reflection.MethodInfo method;
+        public readonly string[] parameters;
+        public readonly System.Type[] parameterTypes;
+        public readonly string signature;
+        public ConsoleMethodInfo(System.Reflection.MethodInfo method, System.Type[] parameterTypes, object instance, string command, string signature, string[] parameters) {}
+        public bool IsValid();
+    }
+
+    public static class DebugLogConsole
+    {
+        public static event DebugLogConsole.CommandExecutedDelegate OnCommandExecuted;
+        public static void AddCommand(string command, string description, System.Action method);
+        public static void AddCommand<T1>(string command, string description, System.Action<T1> method);
+        public static void AddCommand<T1, T2>(string command, string description, System.Action<T1, T2> method);
+        public static void AddCommand<T1, T2, T3>(string command, string description, System.Action<T1, T2, T3> method);
+        public static void AddCommand<T1, T2, T3, T4>(string command, string description, System.Action<T1, T2, T3, T4> method);
+        public static void AddCommand(string command, string description, System.Delegate method);
+        public static void AddCommand<T1>(string command, string description, System.Func<T1> method);
+        public static void AddCommand<T1, T2>(string command, string description, System.Func<T1, T2> method);
+        public static void AddCommand<T1, T2, T3>(string command, string description, System.Func<T1, T2, T3> method);
+        public static void AddCommand<T1, T2, T3, T4>(string command, string description, System.Func<T1, T2, T3, T4> method);
+        public static void AddCommand<T1, T2, T3, T4, T5>(string command, string description, System.Func<T1, T2, T3, T4, T5> method);
+        public static void AddCommand<T1>(string command, string description, System.Action<T1> method, string parameterName);
+        public static void AddCommand(string command, string description, System.Delegate method, params string[] parameterNames);
+        public static void AddCommand<T1, T2>(string command, string description, System.Func<T1, T2> method, string parameterName);
+        public static void AddCommand<T1, T2>(string command, string description, System.Action<T1, T2> method, string parameterName1, string parameterName2);
+        public static void AddCommand<T1, T2, T3>(string command, string description, System.Func<T1, T2, T3> method, string parameterName1, string parameterName2);
+        public static void AddCommand<T1, T2, T3>(string command, string description, System.Action<T1, T2, T3> method, string parameterName1, string parameterName2, string parameterName3);
+        public static void AddCommand<T1, T2, T3, T4>(string command, string description, System.Func<T1, T2, T3, T4> method, string parameterName1, string parameterName2, string parameterName3);
+        public static void AddCommand<T1, T2, T3, T4>(string command, string description, System.Action<T1, T2, T3, T4> method, string parameterName1, string parameterName2, string parameterName3, string parameterName4);
+        public static void AddCommand<T1, T2, T3, T4, T5>(string command, string description, System.Func<T1, T2, T3, T4, T5> method, string parameterName1, string parameterName2, string parameterName3, string parameterName4);
+        public static void AddCommandInstance(string command, string description, string methodName, object instance, params string[] parameterNames);
+        public static void AddCommandStatic(string command, string description, string methodName, System.Type ownerType, params string[] parameterNames);
+        public static void AddCustomParameterType(System.Type type, DebugLogConsole.ParseFunction parseFunction, string typeReadableName = default(string));
+        public static void ExecuteCommand(string command);
+        public static void FetchArgumentsFromCommand(string command, System.Collections.Generic.List<string> commandArguments);
+        public static void FindCommands(string commandName, bool allowSubstringMatching, System.Collections.Generic.List<ConsoleMethodInfo> matchingCommands);
+        public static System.Collections.Generic.List<ConsoleMethodInfo> GetAllCommands();
+        public static string GetAutoCompleteCommand(string commandStart, string previousSuggestion);
+        public static string GetTypeReadableName(System.Type type);
+        public static bool IsSupportedArrayType(System.Type type);
+        public static void LogAllCommands();
+        public static void LogAllCommandsWithName(string commandName);
+        public static void LogSystemInfo();
+        public static bool ParseArgument(string input, System.Type argumentType, out object output);
+        public static bool ParseArray(string input, System.Type arrayType, out object output);
+        public static bool ParseBool(string input, out object output);
+        public static bool ParseBounds(string input, out object output);
+        public static bool ParseBoundsInt(string input, out object output);
+        public static bool ParseByte(string input, out object output);
+        public static bool ParseChar(string input, out object output);
+        public static bool ParseColor(string input, out object output);
+        public static bool ParseColor32(string input, out object output);
+        public static bool ParseComponent(string input, System.Type componentType, out object output);
+        public static bool ParseDecimal(string input, out object output);
+        public static bool ParseDouble(string input, out object output);
+        public static bool ParseEnum(string input, System.Type enumType, out object output);
+        public static bool ParseFloat(string input, out object output);
+        public static bool ParseGameObject(string input, out object output);
+        public static bool ParseInt(string input, out object output);
+        public static bool ParseLong(string input, out object output);
+        public static bool ParseQuaternion(string input, out object output);
+        public static bool ParseRect(string input, out object output);
+        public static bool ParseRectInt(string input, out object output);
+        public static bool ParseRectOffset(string input, out object output);
+        public static bool ParseSByte(string input, out object output);
+        public static bool ParseShort(string input, out object output);
+        public static bool ParseString(string input, out object output);
+        public static bool ParseUInt(string input, out object output);
+        public static bool ParseULong(string input, out object output);
+        public static bool ParseUShort(string input, out object output);
+        public static bool ParseVector2(string input, out object output);
+        public static bool ParseVector2Int(string input, out object output);
+        public static bool ParseVector3(string input, out object output);
+        public static bool ParseVector3Int(string input, out object output);
+        public static bool ParseVector4(string input, out object output);
+        public static void RemoveCommand(System.Action method);
+        public static void RemoveCommand<T1>(System.Action<T1> method);
+        public static void RemoveCommand<T1, T2>(System.Action<T1, T2> method);
+        public static void RemoveCommand<T1, T2, T3>(System.Action<T1, T2, T3> method);
+        public static void RemoveCommand<T1, T2, T3, T4>(System.Action<T1, T2, T3, T4> method);
+        public static void RemoveCommand(System.Delegate method);
+        public static void RemoveCommand<T1>(System.Func<T1> method);
+        public static void RemoveCommand<T1, T2>(System.Func<T1, T2> method);
+        public static void RemoveCommand<T1, T2, T3>(System.Func<T1, T2, T3> method);
+        public static void RemoveCommand<T1, T2, T3, T4>(System.Func<T1, T2, T3, T4> method);
+        public static void RemoveCommand<T1, T2, T3, T4, T5>(System.Func<T1, T2, T3, T4, T5> method);
+        public static void RemoveCommand(System.Reflection.MethodInfo method);
+        public static void RemoveCommand(string command);
+        public static void RemoveCustomParameterType(System.Type type);
+        public static void SearchAssemblyForConsoleMethods(System.Reflection.Assembly assembly);
+        public delegate void CommandExecutedDelegate(string command, object[] parameters);
+        public delegate bool ParseFunction(string input, out object output);
+    }
+
+    public class DebugLogEntry
+    {
+        public int collapsedIndex;
+        public int count;
+        public string logString;
+        public UnityEngine.Sprite logTypeSpriteRepresentation;
+        public string stackTrace;
+        public DebugLogEntry() {}
+        public void Clear();
+        public int GetContentHashCode();
+        public void Initialize(string logString, string stackTrace);
+        public bool MatchesSearchTerm(string searchTerm);
+        public override string ToString();
+    }
+
+    public class DebugLogEntryContentEqualityComparer : System.Collections.Generic.EqualityComparer<DebugLogEntry>
+    {
+        public DebugLogEntryContentEqualityComparer() {}
+        public override bool Equals(DebugLogEntry x, DebugLogEntry y);
+        public override int GetHashCode(DebugLogEntry obj);
+    }
+
+    public struct DebugLogEntryTimestamp
+    {
+        public readonly System.DateTime dateTime;
+        public readonly float elapsedSeconds;
+        public readonly int frameCount;
+        public DebugLogEntryTimestamp(System.DateTime dateTime, float elapsedSeconds, int frameCount) {}
+        public void AppendFullTimestamp(System.Text.StringBuilder sb);
+        public void AppendTime(System.Text.StringBuilder sb);
+    }
+
+    public enum DebugLogFilter
+    {
+        All = -1,
+        None = 0,
+        Info = 1,
+        Warning = 2,
+        Error = 4,
+    }
+
+    public class DebugLogItem : UnityEngine.MonoBehaviour, UnityEngine.EventSystems.IEventSystemHandler, UnityEngine.EventSystems.IPointerClickHandler
+    {
+        public int Index;
+        public UnityEngine.CanvasGroup CanvasGroup { get; }
+        public DebugLogEntry Entry { get; }
+        public bool Expanded { get; }
+        public UnityEngine.UI.Image Image { get; }
+        public System.Nullable<DebugLogEntryTimestamp> Timestamp { get; }
+        public UnityEngine.RectTransform Transform { get; }
+        public DebugLogItem() {}
+        public float CalculateExpandedHeight(DebugLogEntry logEntry, System.Nullable<DebugLogEntryTimestamp> logEntryTimestamp);
+        public void CopyLog();
+        public void HideCount();
+        public void Initialize(DebugLogRecycledListView listView);
+        public void OnPointerClick(UnityEngine.EventSystems.PointerEventData eventData);
+        public void SetContent(DebugLogEntry logEntry, System.Nullable<DebugLogEntryTimestamp> logEntryTimestamp, int entryIndex, bool isExpanded);
+        public void ShowCount();
+        public override string ToString();
+        public void UpdateTimestamp(DebugLogEntryTimestamp timestamp);
+    }
+
+    public class DebugLogLogcatListener : UnityEngine.AndroidJavaProxy
+    {
+        public DebugLogLogcatListener() {}
+        protected override void Finalize();
+        public string GetLog();
+        [UnityEngine.Scripting.Preserve] public void OnLogReceived(string log);
+        public void Start(string arguments);
+        public void Stop();
+    }
+
+    public class DebugLogManager : UnityEngine.MonoBehaviour
+    {
+        public System.Action OnLogWindowHidden;
+        public System.Action OnLogWindowShown;
+        public bool SnapToBottom = true;
+        [UnityEngine.SerializeField] public System.Collections.Generic.List<UnityEngine.InputSystem.InputActionReference> toggleBindings;
+        public bool IsLogWindowVisible { get; }
+        public bool PopupEnabled { get; set; }
+        public DebugLogManager() {}
+        public static void AdjustLatestPendingLog(bool autoExpand, bool stripStackTrace);
+        public void ClearLogs();
+        public string GetAllLogs();
+        public void HideLogWindow();
+        public void ReceivedLog(string logString, string stackTrace, UnityEngine.LogType logType);
+        public void SaveLogsToFile();
+        public void SaveLogsToFile(string filePath);
+        public void ShowLogWindow();
+    }
+
+    public class DebugLogPopup : UnityEngine.MonoBehaviour, UnityEngine.EventSystems.IBeginDragHandler, UnityEngine.EventSystems.IDragHandler, UnityEngine.EventSystems.IEndDragHandler, UnityEngine.EventSystems.IEventSystemHandler, UnityEngine.EventSystems.IPointerClickHandler
+    {
+        public bool IsVisible { get; }
+        public DebugLogPopup() {}
+        public void Hide();
+        public void NewLogsArrived(int newInfo, int newWarning, int newError);
+        public void OnBeginDrag(UnityEngine.EventSystems.PointerEventData data);
+        public void OnDrag(UnityEngine.EventSystems.PointerEventData data);
+        public void OnEndDrag(UnityEngine.EventSystems.PointerEventData data);
+        public void OnPointerClick(UnityEngine.EventSystems.PointerEventData data);
+        public void Show();
+        public void UpdatePosition(bool immediately);
+    }
+
+    public class DebugLogRecycledListView : UnityEngine.MonoBehaviour
+    {
+        public float ItemHeight { get; }
+        public float SelectedItemHeight { get; }
+        public DebugLogRecycledListView() {}
+        public void DeselectSelectedLogItem();
+        public void Initialize(DebugLogManager manager, IngameDebugConsole.DynamicCircularBuffer<DebugLogEntry> entriesToShow, IngameDebugConsole.DynamicCircularBuffer<DebugLogEntryTimestamp> timestampsOfEntriesToShow, float logItemHeight);
+        public void OnCollapsedLogEntryAtIndexUpdated(int index);
+        public void OnLogEntriesRemoved(int removedLogCount);
+        public void OnLogEntriesUpdated(bool updateAllVisibleItemContents);
+        public void OnLogItemClicked(DebugLogItem item);
+        public void OnViewportHeightChanged();
+        public void OnViewportWidthChanged();
+        public void RefreshCollapsedLogEntryCounts();
+        public void SelectAndFocusOnLogItemAtIndex(int itemIndex);
+        public void SetCollapseMode(bool collapse);
+    }
+
+    public class DebugLogResizeListener : UnityEngine.MonoBehaviour, UnityEngine.EventSystems.IBeginDragHandler, UnityEngine.EventSystems.IDragHandler, UnityEngine.EventSystems.IEventSystemHandler
+    {
+        public DebugLogResizeListener() {}
+    }
+
+    public class DebugsOnScrollListener : UnityEngine.MonoBehaviour, UnityEngine.EventSystems.IBeginDragHandler, UnityEngine.EventSystems.IEndDragHandler, UnityEngine.EventSystems.IEventSystemHandler, UnityEngine.EventSystems.IScrollHandler
+    {
+        public DebugLogManager debugLogManager;
+        public UnityEngine.UI.ScrollRect debugsScrollRect;
+        public DebugsOnScrollListener() {}
+        public void OnBeginDrag(UnityEngine.EventSystems.PointerEventData data);
+        public void OnEndDrag(UnityEngine.EventSystems.PointerEventData data);
+        public void OnScroll(UnityEngine.EventSystems.PointerEventData data);
+        public void OnScrollbarDragEnd(UnityEngine.EventSystems.BaseEventData data);
+        public void OnScrollbarDragStart(UnityEngine.EventSystems.BaseEventData data);
+    }
+
+    public class DynamicCircularBuffer<T>
+    {
+        public int Capacity { get; }
+        public int Count { get; }
+        public T this[int index] { get; set; }
+        public DynamicCircularBuffer(int initialCapacity = 2) {}
+        public void Add(T value);
+        public void AddFirst(T value);
+        public void AddRange(IngameDebugConsole.DynamicCircularBuffer<T> other);
+        public void Clear();
+        public void ForEach(System.Action<T> action);
+        public int IndexOf(T value);
+        public int RemoveAll(System.Predicate<T> shouldRemoveElement);
+        public int RemoveAll<Y>(System.Predicate<T> shouldRemoveElement, System.Action<T, int> onElementIndexChanged, IngameDebugConsole.DynamicCircularBuffer<Y> synchronizedBuffer);
+        public T RemoveFirst();
+        public T RemoveLast();
+        public void TrimEnd(int trimCount, System.Action<T> perElementCallback = default(System.Action<T>));
+        public void TrimStart(int trimCount, System.Action<T> perElementCallback = default(System.Action<T>));
+    }
+
+    [UnityEngine.DefaultExecutionOrder(1000)] public class EventSystemHandler : UnityEngine.MonoBehaviour
+    {
+        public EventSystemHandler() {}
+    }
+
+    [UnityEngine.DefaultExecutionOrder(-50)] public class InputFieldWarningsFixer : UnityEngine.MonoBehaviour
+    {
+        public InputFieldWarningsFixer() {}
+        protected void OnValidate();
+    }
+
+    public enum PopupVisibility
+    {
+        Always = 0,
+        WhenLogReceived = 1,
+        Never = 2,
+    }
+
+    public struct QueuedDebugLogEntry
+    {
+        public readonly string logString;
+        public readonly UnityEngine.LogType logType;
+        public readonly string stackTrace;
+        public QueuedDebugLogEntry(string logString, string stackTrace, UnityEngine.LogType logType) {}
+        public bool MatchesSearchTerm(string searchTerm);
+    }
+}
+
+namespace SOSXR.IngameDebugConsole
+{
+    [UnityEngine.RequireComponent(typeof(UnityEngine.Canvas))] public class CanvasTaggedScreenSpaceCam : UnityEngine.MonoBehaviour
+    {
+        public CanvasTaggedScreenSpaceCam() {}
+    }
+
+    [UnityEngine.RequireComponent(typeof(UnityEngine.Canvas))] public class CanvasTaggedWorldCam : UnityEngine.MonoBehaviour
+    {
+        public CanvasTaggedWorldCam() {}
+    }
+}
