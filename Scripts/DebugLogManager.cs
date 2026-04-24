@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -370,8 +370,15 @@ namespace IngameDebugConsole
         private void Awake()
         {
             pooledLogEntries = new Stack<DebugLogEntry>(64);
-            pooledLogItems = new Stack<DebugLogItem>(16);
-            commandSuggestionInstances = new List<Text>(8);
+            pooledLogItems = new Stack<DebugLogItem>(64);
+            commandSuggestionInstances = new List<Text>(32);
+
+            for (int i = 0; i < 32; i++)
+            {
+                var suggestion = Instantiate(commandSuggestionPrefab, commandSuggestionsContainer, false);
+                suggestion.gameObject.SetActive(false);
+                commandSuggestionInstances.Add(suggestion);
+            }
             matchingCommandSuggestions = new List<ConsoleMethodInfo>(8);
             commandCaretIndexIncrements = new List<int>(8);
             queuedLogEntries = new DynamicCircularBuffer<QueuedDebugLogEntry>(Mathf.Clamp(queuedLogLimit, 16, 4096));
@@ -413,6 +420,14 @@ namespace IngameDebugConsole
             }
 
             recycledListView.Initialize(this, logEntriesToShow, timestampsOfLogEntriesToShow, logItemPrefab.Transform.sizeDelta.y);
+
+            // Pre-warm log item pool to avoid runtime Instantiate allocations
+            for (int i = 0; i < 64; i++)
+            {
+                var logItem = Instantiate(logItemPrefab, logItemsContainer, false);
+                logItem.Initialize(recycledListView);
+                PoolLogItem(logItem);
+            }
 
             if (minimumWidth < 100f)
             {
