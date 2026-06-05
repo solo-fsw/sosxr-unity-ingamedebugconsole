@@ -10,6 +10,9 @@ namespace SOSXR.IngameDebugConsole
     [RequireComponent(typeof(Canvas))]
     public class CanvasTaggedWorldCam : MonoBehaviour
     {
+
+        private Camera _camera;
+
         /// <summary>
         /// Tag of the GameObject that contains the target <see cref="Camera"/>.
         /// </summary>
@@ -20,6 +23,7 @@ namespace SOSXR.IngameDebugConsole
         private void Awake()
         {
             _canvas = GetComponent<Canvas>();
+            _camera = GameObject.FindWithTag(m_camTag)?.GetComponentInChildren<Camera>();
         }
 
 
@@ -37,13 +41,11 @@ namespace SOSXR.IngameDebugConsole
 
         private void FindWorldCamera()
         {
-            if (_canvas.worldCamera == null && GameObject.FindWithTag(m_camTag) != null)
+            if (_canvas.worldCamera == null && _camera != null)
             {
-                _canvas.worldCamera = GameObject.FindWithTag(m_camTag).GetComponentInChildren<Camera>();
-
-                return;
+                _canvas.worldCamera = _camera;
             }
-
+            
             enabled = false; // Disable this component
         }
     }
