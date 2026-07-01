@@ -1740,17 +1740,14 @@ namespace IngameDebugConsole
 
                 for (var i = 0; i < suggestionsCount; i++)
                 {
+                    if (i >= suggestionInstancesCount)
+                    {
+                        break;
+                    }
+
                     if (i >= visibleCommandSuggestionInstances)
                     {
-                        if (i >= suggestionInstancesCount)
-                        {
-                            commandSuggestionInstances.Add(Instantiate(commandSuggestionPrefab, commandSuggestionsContainer, false));
-                        }
-                        else
-                        {
-                            commandSuggestionInstances[i].gameObject.SetActive(true);
-                        }
-
+                        commandSuggestionInstances[i].gameObject.SetActive(true);
                         visibleCommandSuggestionInstances++;
                     }
 

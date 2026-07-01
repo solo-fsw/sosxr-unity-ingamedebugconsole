@@ -5,6 +5,14 @@ public class CreateDemoLogs : MonoBehaviour
 {
     public string IdentifyerText;
 
+    private string _gameObjectName;
+
+
+    private void Awake()
+    {
+        _gameObjectName = gameObject.name;
+    }
+
 
     private void Start()
     {
@@ -16,7 +24,7 @@ public class CreateDemoLogs : MonoBehaviour
 
     private void Update()
     {
-        Debug.LogFormat(this, "This is a log with a context of the name of the GameObject where it came from: {0}", gameObject.name);
+        Debug.LogFormat(this, "This is a log with a context of the name of the GameObject where it came from: {0}", _gameObjectName);
     }
 
 
